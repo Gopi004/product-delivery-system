@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import '../index.css';
 
 const AuthForm = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -37,48 +38,41 @@ const AuthForm = () => {
     };
 
     return (
-        <div>
-            <h2>{isLogin ? 'Login' : 'Register'}</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Role:</label>
-                    <select value={role} onChange={(e) => setRole(e.target.value)}>
-                        <option value="customer">Customer</option>
-                        <option value="dealer">Dealer</option>
-                        <option value="delivery">Delivery Personnel</option>
-                    </select>
-                </div>
-                {!isLogin && (
-                    <>
-                        <div>
-                            <label>Name:</label>
-                            <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-                        </div>
-                        {/* 2. Added Phone and Address inputs */}
-                        <div>
-                            <label>Phone:</label>
-                            <input type="text" name="phone" value={formData.phone} onChange={handleChange} />
-                        </div>
-                        <div>
-                            <label>Address:</label>
-                            <input type="text" name="address" value={formData.address} onChange={handleChange} />
-                        </div>
-                    </>
-                )}
-                <div>
-                    <label>Email:</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} required />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-                </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit">{isLogin ? 'Login' : 'Sign Up'}</button>
-            </form>
-            <button onClick={() => setIsLogin(!isLogin)}>
-                {isLogin ? 'Need an account? Register' : 'Have an account? Login'}
-            </button>
+        <div className="container">
+            <div className="heading-msg">
+                <p className="sub-heading">Welcome to</p>
+                <p className="heading">PRODUCT</p>
+                <p className="heading">DELIVERY</p>
+                <p className="heading">SYSTEM</p>
+            </div>
+            <div className='auth'>
+                <h3>{isLogin ? 'Login' : 'Register'}</h3>
+                <form className='form' onSubmit={handleSubmit}>
+                    <div>
+                        <select className='input' value={role} onChange={(e) => setRole(e.target.value)}>
+                            <option value="customer">Customer</option>
+                            <option value="dealer">Dealer</option>
+                            <option value="delivery">Delivery Personnel</option>
+                        </select>
+                    </div>
+
+                    {!isLogin && (
+                        <>
+                            <input className='input' type="text" name="name" placeholder='Name' value={formData.name} onChange={handleChange} required />
+                            <input className='input' type="text" name="phone" placeholder='Phone' value={formData.phone} onChange={handleChange} />
+                            <input className='input' type="text" name="address" placeholder='Address' value={formData.address} onChange={handleChange} />
+                        </>
+                    )}
+                    <input className='input' type="email" name="email" placeholder='Email' value={formData.email} onChange={handleChange} required />
+                    <input className='input' type="password" name="password" placeholder='Password' value={formData.password} onChange={handleChange} required />
+
+                    {error && <p className='auth-error' style={{ color: 'red' }}>{error}</p>}
+                    <button className='auth-btn' type="submit">{isLogin ? 'Login' : 'Sign Up'}</button>
+                </form>
+                <button className='auth-btn2' onClick={() => setIsLogin(!isLogin)}>
+                    <u>{isLogin ? 'Need an account? Register' : 'Have an account? Login'}</u>
+                </button>
+            </div>
         </div>
     );
 };
