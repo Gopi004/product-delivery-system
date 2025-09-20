@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthForm from './components/AuthForm';
 import Card from './components/card';
-import './App.css';
+import './App.css';import './index.css'
+
 
 // --- Placeholder Components ---
 // You should move these into their own files inside a 'pages' folder later.
 
 const HomePage = () => (
   <div>
-    <h1>Welcome to the Product Delivery System</h1>
     <AuthForm />
   </div>
 );
