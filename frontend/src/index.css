@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap');
+
+html,body{
+    padding: 0;
+    margin: 0;
+}
+.container{
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    border: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10vw;
+    font-family: "Poetsen One", sans-serif;
+}
+.heading{
+    font-size: 4rem;
+    margin: 2vh 0;
+}
+.sub-heading{
+    font-size: 1.5rem;
+}
+h3{
+    margin: 0;
+    font-weight: 100;
+    font-size: 1.5rem;
+}
+.auth{
+    width: 30vw;
+    border: 3px solid rgb(7, 62, 145);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3vh;
+    padding: 4vh;
+    background-color: rgba(155, 153, 153, 0.348);
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3vh;
+}
+.input{
+    border: none;
+    height: 6vh;
+    width: 18vw;
+    border-radius: 10px;
+    font-size: 1rem;
+    padding-left: 1.5vw;
+}
+.auth-btn{
+    height: 6vh;
+    width: 8vw;
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(41, 130, 185);
+    color: white;
+    font-family: "Poetsen One";
+    font-weight: 100;
+    cursor: pointer;
+}
+.auth-btn:hover{
+    transform: scale(1.04);
+    transition: 0.7s ease;
+}
+.auth-btn2{
+    border: none;
+    font-family: "Poetsen One";
+    font-weight: 100;
+    background-color: rgba(219, 216, 216, 0.348);
+    cursor: pointer;
+}
+.auth-error{
+    margin: 0;
+}

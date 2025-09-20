@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthForm from './components/AuthForm';
+import './index.css'
 
 
 // --- Placeholder Components ---
@@ -7,7 +8,6 @@ import AuthForm from './components/AuthForm';
 
 const HomePage = () => (
   <div>
-    <h1>Welcome to the Product Delivery System</h1>
     <AuthForm />
   </div>
 );
