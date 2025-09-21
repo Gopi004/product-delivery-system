@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthForm from './components/AuthForm';
-import './index.css'
+import Card from './components/card';
+import './App.css';import './index.css'
 
 
 // --- Placeholder Components ---
@@ -12,7 +13,7 @@ const HomePage = () => (
   </div>
 );
 
-const CustomerDashboard = () => <h2>Customer Dashboard</h2>;
+const CustomerDashboard = () => <Card />
 const DealerDashboard = () => <h2>Dealer Dashboard</h2>;
 const DeliveryDashboard = () => <h2>Delivery Personnel Dashboard</h2>;
 
