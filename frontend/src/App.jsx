@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthForm from './components/AuthForm';
 import Card from './components/card';
 import './App.css';import './index.css'
+import DealerPage from './pages/DealerPage.jsx';
 
 
 // --- Placeholder Components ---
@@ -27,7 +28,7 @@ function App() {
 
         {/* Routes for the different user dashboards */}
         <Route path="/customer/dashboard" element={<CustomerDashboard />} />
-        <Route path="/dealer/dashboard" element={<DealerDashboard />} />
+        <Route path="/dealer/dashboard" element={<DealerPage />} />
         <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
       </Routes>
     </BrowserRouter>
