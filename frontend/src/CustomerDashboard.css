@@ -1,0 +1,195 @@
+/*Card Grid styles */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* card styles */
+body {
+  background-color: #e9e9e9;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.card {
+  background-color: #ffffff;
+  width: 280px;         /* Was 340px */
+  padding: 15px;        /* Was 20px */
+  border-radius: 25px;  /* Was 30px */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;            /* Was 15px */
+}
+
+.image-container {
+  background-color: #b5ffdf;
+  border-radius: 20px;  /* Was 20px, can keep */
+  padding: 12px;        /* Was 20px */
+}
+
+.product-image {
+  width: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease-in-out;
+  border-radius: 20px;  /* Was 20px, can keep */
+}
+
+.product-image:hover {
+  transform: scale(1.05);
+}
+
+.product-details {
+  text-align: left;
+  padding: 0 5px;       /* Was 0 10px */
+  flex-grow: 1;
+}
+
+.product-title {
+  font-size: 1.5rem;    /* Was 0.9rem */
+  font-weight: 600;
+  color: #2e7d32;
+  margin: 0;
+}
+
+.product-description {
+  font-size: 1rem;   /* Was 1.5rem */
+  font-weight: 700;
+  color: #121212;
+  margin: 4px 0;        /* Was 5px 0 */
+  padding: 10px 0;    /* Was 15px 0 */
+}
+
+.product-price {
+  font-size: 1.1rem;    /* Was 1.2rem */
+  font-weight: 500;
+  color: #555555;
+  margin: 8px 0 0;      /* Was 10px 0 0 */
+  padding: 10px 0;    /* Was 15px 0 */
+}
+
+.buy-button {
+  background-color: #9dfcff;
+  color: #ffffff;
+  font-size: 15px;    /* 0.9rem = 14.4px if root is 16px */
+  font-weight: 600;
+  border: none;
+  border-radius: 20px;
+  width: 50px;
+  padding: 14px;        /* Was 16px */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.buy-button img {
+  height: 20px; /* Adjust the size as needed */
+  display: block; /* Helps with alignment */
+}
+
+.buy-button:hover {
+  background-color: #424242;
+}
+.action-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+/* This container styles the counter itself */
+.quantity-counter {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between -, number, and + */
+}
+
+/* Style for the number display */
+.quantity-counter span {
+  font-weight: bold;
+  font-size: 1.1rem;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Common style for the + and - buttons */
+.quantity-counter button {
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 50%; /* Makes them circular */
+  width: 30px;
+  height: 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*Navbar styles*/
+/* src/components/Navbar/Navbar.css */
+
+.navbar-container {
+  background-color: #f8f8f8; /* Light background for the container */
+  padding: 15px 0; /* Vertical padding */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  border-radius: 15px; /* Rounded corners for the whole bar */
+  max-width: 90%; /* Adjust max-width as needed */
+  margin: 20px auto; /* Center the bar horizontally, add space from top */
+  border: 1px solid #e0e0e0; /* Light border */
+}
+
+.navbar-content {
+  display: flex; /* Use flexbox for layout */
+  justify-content: space-between; /* Space out left and right sections */
+  align-items: center; /* Vertically align items */
+  max-width: 1200px; /* Max width for content inside the bar */
+  margin: 0 auto; /* Center content horizontally */
+  padding: 0 20px; /* Horizontal padding for content */
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  height: 30px; /* Adjust logo height as needed */
+  margin-right: 10px; /* Space between logo and app name */
+}
+
+.navbar-app-name {
+  font-size: 1.5rem; /* Larger font size for the app name */
+  font-weight: 700; /* Bold text */
+  color: #333; /* Dark text color */
+}
+
+.navbar-right {
+  display: flex;
+  gap: 10px; /* Space between the buttons */
+}
+
+.navbar-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px; /* Slightly rounded button corners */
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navbar-button:hover {
+  background-color: #e0e0e0; /* Light grey on hover */
+  color: #333333; /* Darker text on hover */
+}   
+
