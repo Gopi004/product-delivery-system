@@ -2,6 +2,8 @@ import {useState} from "react";
 import Card from "../components/card.jsx"
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import axios from 'axios';
+
 
 function DealerPage(){
 
@@ -12,11 +14,28 @@ function DealerPage(){
         setProduct((prev) => ({ ...prev, [name]: value }));
     }
 
-    function handleSubmit(e,close){
+    async function handleSubmit(e,close){
         e.preventDefault();
 
-        setProduct({name:"",description:"",price:"",stock:""});
-        close();
+        try
+        {
+            const token = localStorage.getItem('token');
+             const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+
+            await axios.post("http://localhost:5000/api/products",product,config);
+            alert('Product added successfully!');
+            setProduct({name:"",description:"",price:"",stock:""});
+            close(); 
+        }
+        catch(error)
+        {
+            console.log(error);
+            alert('Failed to add product.');
+        }
     }
 
     return(
