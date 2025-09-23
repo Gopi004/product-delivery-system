@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthForm from './components/AuthForm';
-import Card from './components/card';
-import './App.css';import './index.css'
+import CardGrid from './components/CardGrid';
+import './CustomerDashboard.css';import './index.css'
 
 
 // --- Placeholder Components ---
@@ -13,7 +13,7 @@ const HomePage = () => (
   </div>
 );
 
-const CustomerDashboard = () => <Card />
+const CustomerDashboard = () => <CardGrid />
 const DealerDashboard = () => <h2>Dealer Dashboard</h2>;
 const DeliveryDashboard = () => <h2>Delivery Personnel Dashboard</h2>;
 

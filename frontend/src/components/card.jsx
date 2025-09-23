@@ -1,19 +1,35 @@
-import React from "react";
-import mechanicalKeyboard from "../assets/mech_keyboard.png";
+import React,{useState} from "react";
+import addCartIcon from "../assets/add_to_cart.png";
+const Card = ({product}) =>{
+    const[quantity,setQuantity] = useState(1);
+    const handleIncrement = () =>{
+        setQuantity(prevQuantity => prevQuantity + 1);
+    };
 
-const Card = () =>{
-
+    const handleDecrement = () =>{
+        if(quantity > 1){
+            setQuantity(prevQuantity => prevQuantity - 1);
+        }
+    };
+    
     return(
         <div className="card">
             <div className="image-container">
-                <img src={mechanicalKeyboard} alt="keyboard" className="product-image" />
+                <img src={product.imageUrl} alt={product.name} className="product-image" />
             </div>
 
             <div className="product-details">
-                <h2 className="product-title">Mechanical Keyboard</h2>
-                <p className="product-description">A high-quality mechanical keyboard with customizable RGB lighting and programmable keys.</p>
-                <p className="product-price">$120.00</p>
-                <button className="buy-button">Buy Now</button>
+                <h2 className="product-title">{product.name}</h2>
+                <p className="product-description">{product.description}</p>
+                <p className="product-price">${product.price}</p>
+                <div className="action-section">
+                    <div className="quantity-counter">
+                    <button onClick={handleDecrement}>-</button>
+                    <span>{quantity}</span>
+                    <button onClick={handleIncrement}>+</button>
+                </div>
+                <button className="buy-button"><img src={addCartIcon} alt="cart-image" className="cart-icon"/></button>
+                </div>
             </div>
         </div>
     );
