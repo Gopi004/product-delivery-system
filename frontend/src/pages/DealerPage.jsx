@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState , useEffect} from "react";
 import Card from "../components/card.jsx"
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
@@ -7,34 +7,62 @@ import axios from 'axios';
 
 function DealerPage(){
 
-    const [product,setProduct] = useState({name:"",description:"",price:"",stock:""});
+    const [formData,setformData] = useState({name:"",description:"",price:"",stock:""});
+    const [products,setProducts]=useState([]);
+    const [error, setError] = useState('');
+
+
+     const createApiConfig = () => {
+        const token = localStorage.getItem('token');
+        return { 
+            headers: 
+            { Authorization: `Bearer ${token}` } 
+        };
+    };
+
+    const fetchProducts = async () =>
+    {
+        try
+        {
+            setError('');
+            const config = createApiConfig();
+            const response = await axios.get("http://localhost:5000/api/products/my-products",config);
+            setProducts(response.data);
+        }
+        catch(err)
+        {
+            console.error(err);
+            setError("Failed to fetch products");
+        }
+    }
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
 
     function handleInput(e){
         const { name, value } = e.target;
-        setProduct((prev) => ({ ...prev, [name]: value }));
+        setformData((prev) => ({ ...prev, [name]: value }));
     }
 
     async function handleSubmit(e,close){
         e.preventDefault();
 
         try
-        {
-            const token = localStorage.getItem('token');
-             const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            };
+        {   
+            setError('');
+            const config = createApiConfig();
 
-            await axios.post("http://localhost:5000/api/products",product,config);
+            await axios.post("http://localhost:5000/api/products",formData,config);
             alert('Product added successfully!');
-            setProduct({name:"",description:"",price:"",stock:""});
+            setformData({name:"",description:"",price:"",stock:""});
+            fetchProducts();
             close(); 
         }
-        catch(error)
+        catch(err)
         {
-            console.log(error);
-            alert('Failed to add product.');
+            console.error(err);
+            setError(err.response?.data?.message || 'An error occurred while adding products.');
         }
     }
 
@@ -49,10 +77,10 @@ function DealerPage(){
                             <div className="modal">
                                 <button className="form-close-btn" onClick={close}>&times;</button>
                                 <form className="new-product-form" onSubmit={(e) => handleSubmit(e, close)}>
-                                    <input className="new-product-name" type="text" name="name" placeholder="Name" value={product.name} onChange={handleInput} required />
-                                    <textarea className="new-product-desc" name="description" placeholder="Description" value={product.description} onChange={handleInput} required></textarea>
-                                    <input className="new-product-price" type="number" name="price" placeholder="Price" value={product.price} onChange={handleInput} required />
-                                    <input className="new-product-stock" type="number" name="stock" placeholder="Stock" value={product.stock} onChange={handleInput} required />
+                                    <input className="new-product-name" type="text" name="name" placeholder="Name" value={formData.name} onChange={handleInput} required />
+                                    <textarea className="new-product-desc" name="description" placeholder="Description" value={formData.description} onChange={handleInput} required></textarea>
+                                    <input className="new-product-price" type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInput} required />
+                                    <input className="new-product-stock" type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleInput} required />
                                     <button className="save-btn" type="submit">Save Product</button>
                                 </form>
                             </div>
@@ -63,8 +91,16 @@ function DealerPage(){
             <div className="dealer-body">
                 <h3>My Products</h3>
                 <hr />
+                 {error && <p style={{ color: 'red' }}>{error}</p>}
+
                 <div className="content">
-                    
+                    {products.map(product => (
+                        <Card 
+                            key={product.product_id} 
+                            product={product} 
+                            // onEdit and onDelete will be added later
+                        />
+                    ))}
                 </div>
             </div>
         </div>
