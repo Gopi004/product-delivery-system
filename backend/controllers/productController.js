@@ -7,7 +7,7 @@ const getAllProducts= async (req,res) =>{
   }
   catch(error)
   {
-    res.status(500).json({message : "Server Eroor"});
+    res.status(500).json({message : "Server Error"});
   }
 };
 
@@ -19,7 +19,7 @@ const getDealerProduct = async (req,res) =>{
   }
   catch(error)
   {
-    res.status(500).json({message : "Server Eroor"});
+    res.status(500).json({message : "Server Error"});
   }
 };
 
