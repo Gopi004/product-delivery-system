@@ -3,7 +3,7 @@ import Card from "../components/card.jsx"
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
-
+import CardGrid from "../components/CardGrid.jsx";
 
 function DealerPage(){
 
@@ -94,13 +94,8 @@ function DealerPage(){
                  {error && <p style={{ color: 'red' }}>{error}</p>}
 
                 <div className="content">
-                    {products.map(product => (
-                        <Card 
-                            key={product.product_id} 
-                            product={product} 
-                            // onEdit and onDelete will be added later
-                        />
-                    ))}
+                    <CardGrid products={products} actor="dealer" fetchProducts={fetchProducts}/> 
+                    {/*change inputs when backend is ready*/}
                 </div>
             </div>
         </div>

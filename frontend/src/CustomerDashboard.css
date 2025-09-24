@@ -18,6 +18,7 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
+  
 }
 
 .card {
@@ -77,33 +78,56 @@ body {
   padding: 10px 0;    /* Was 15px 0 */
 }
 
-.buy-button {
-  background-color: #9dfcff;
-  color: #ffffff;
-  font-size: 15px;    /* 0.9rem = 14.4px if root is 16px */
+/* --- Corrected CSS --- */
+
+/* 1. Base class for ALL buttons in the action section */
+.action-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
   font-weight: 600;
   border: none;
-  border-radius: 20px;
-  width: 50px;
-  padding: 14px;        /* Was 16px */
+  border-radius: 50px; /* Fully rounded corners */
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-.buy-button img {
-  height: 20px; /* Adjust the size as needed */
-  display: block; /* Helps with alignment */
+
+/* 2. Specific class for the circular icon button */
+.icon-button {
+  background-color: #9dfcff; /* Light cyan color */
+  width: 50px; /* Fixed width */
+  height: 50px; /* Fixed height to make it a circle */
+  padding: 0; /* Remove padding to center the icon */
 }
 
-.buy-button:hover {
-  background-color: #424242;
+.icon-button img {
+  height: 24px; /* Adjust icon size as needed */
 }
+
+.icon-button:hover {
+  background-color: #81e6ea; /* Slightly darker cyan on hover */
+}
+
+/* 3. Specific class for the text buttons (Edit/Delete) */
+.text-button {
+  background-color: #9dfcff; /* A neutral gray */
+  color: #000000;
+  padding: 10px 20px; /* Vertical and horizontal padding to fit text */
+}
+
+.text-button:hover {
+  background-color: #81e6ea;
+}
+
+/* Your flex container for the buttons remains the same */
 .action-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 15px;
+  gap: 10px; /* It's good practice to add a gap */
 }
-
 /* This container styles the counter itself */
 .quantity-counter {
   display: flex;
@@ -135,6 +159,7 @@ body {
   align-items: center;
 }
 
+
 /*Navbar styles*/
 /* src/components/Navbar/Navbar.css */
 
@@ -145,7 +170,8 @@ body {
   border-radius: 15px; /* Rounded corners for the whole bar */
   max-width: 90%; /* Adjust max-width as needed */
   margin: 20px auto; /* Center the bar horizontally, add space from top */
-  border: 1px solid #e0e0e0; /* Light border */
+  border: 1px solid #0b0303; /* Light border */
+  position:sticky;
 }
 
 .navbar-content {
@@ -155,7 +181,7 @@ body {
   align-items: center; /* Vertically align items */
   width: 1200px; /* Max width for content inside the bar */
   margin: 0 auto; /* Center content horizontally */
-  padding: 0 20px; /* Horizontal padding for content */
+  padding: 0 18px; /* Horizontal padding for content */
 }
 
 .navbar-left {
