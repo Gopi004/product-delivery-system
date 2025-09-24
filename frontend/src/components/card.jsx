@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import addCartIcon from "../assets/add_to_cart.png";
 const Card = ({product,view,onAddToCart,onEdit,onDelete}) =>{
     console.log("View prop in Card component:", view);
-    const[quantity,setQuantity] = useState(1);
+    const[quantity,setQuantity] = useState(product.stock);
 
     const handleIncrement = () =>{
         setQuantity(prevQuantity => prevQuantity + 1);
