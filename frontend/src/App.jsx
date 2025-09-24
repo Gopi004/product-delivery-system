@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthForm from './components/AuthForm';
-import CardGrid from './components/CardGrid';
-import './CustomerDashboard.css';import './index.css'
+import CustomerDashboard from './pages/CustomerDashboard.jsx';
+import './index.css'
 import DealerPage from './pages/DealerPage.jsx';
-
+import './CustomerDashboard.css'
 
 // --- Placeholder Components ---
 // You should move these into their own files inside a 'pages' folder later.
@@ -14,7 +14,7 @@ const HomePage = () => (
   </div>
 );
 
-const CustomerDashboard = () => <CardGrid />
+const Customerdash = () => <h2>Customer Dashboard</h2>;
 const DealerDashboard = () => <h2>Dealer Dashboard</h2>;
 const DeliveryDashboard = () => <h2>Delivery Personnel Dashboard</h2>;
 

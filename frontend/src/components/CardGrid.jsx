@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "./card";
 import mechanicalKeyboard from '../assets/mech_keyboard.png';
-import NavBar from "./NavBar";
+
 
 const products = [
   { 
@@ -34,13 +34,12 @@ const products = [
   },
 ];
 
-const CardGrid = () => {
+const CardGrid = ({actor}) => {
     return (
         <div>
-        <div><NavBar /></div>
         <div className="card-grid">
             {products.map(product => (  
-                <Card key={product.id} product={product} />
+                <Card key={product.id} product={product} view={actor} />
             ))}
         </div>
         </div>
