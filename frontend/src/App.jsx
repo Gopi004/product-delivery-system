@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { CartProvider } from './components/CartContext.jsx';
 import AuthForm from './components/AuthForm';
 import CustomerDashboard from './pages/CustomerDashboard.jsx';
 import './index.css'
@@ -23,6 +24,7 @@ const DeliveryDashboard = () => <h2>Delivery Personnel Dashboard</h2>;
 function App() {
   return (
     <BrowserRouter>
+    <CartProvider>
       <Routes>
         {/* Route for the homepage / login page */}
         <Route path="/" element={<HomePage />} />
@@ -33,6 +35,7 @@ function App() {
         <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
         <Route path="/cart" element={<CartPage />} />
       </Routes>
+      </CartProvider>
     </BrowserRouter>
   );
 }

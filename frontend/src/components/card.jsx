@@ -1,6 +1,7 @@
 import React,{useState} from "react";
 import addCartIcon from "../assets/add_to_cart.png";
 import mechanicalKeyboard from '../assets/mech_keyboard.png';
+import { useCart } from "./CartContext";
 
 const products = [
   { 
@@ -38,7 +39,7 @@ const products = [
 const Card = ({product,view,onAddToCart,onEdit,onDelete}) =>{
     console.log("View prop in Card component:", view);
     const[quantity,setQuantity] = useState(0);
-
+    const { addToCart } = useCart();
     const handleIncrement = () =>{
         setQuantity(prevQuantity => prevQuantity + 1);
     };
@@ -68,7 +69,7 @@ const Card = ({product,view,onAddToCart,onEdit,onDelete}) =>{
                             <span>{quantity}</span>
                             <button onClick={handleIncrement}>+</button>
                         </div>
-                        <button className="action-button icon-button" onClick={()=>onAddToCart(product,quantity)}>
+                        <button className="action-button icon-button" onClick={()=>addToCart(product,quantity)}>
                                 <img src={addCartIcon} alt="cart-image" className="cart-icon"/>
                         </button>
                     </>
@@ -80,6 +81,7 @@ const Card = ({product,view,onAddToCart,onEdit,onDelete}) =>{
                     <button className="action-button text-button">Delete</button>
                 </div>
                 )}
+                
 
                 </div>
              
