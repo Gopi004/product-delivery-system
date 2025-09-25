@@ -3,7 +3,7 @@ import Card from "../components/card.jsx"
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
-import CardGrid from "../components/CardGrid.jsx";
+import CardGrid from "../components/card.jsx";
 
 function DealerPage(){
 

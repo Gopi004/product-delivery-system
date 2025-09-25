@@ -4,6 +4,7 @@ import CustomerDashboard from './pages/CustomerDashboard.jsx';
 import './index.css'
 import DealerPage from './pages/DealerPage.jsx';
 import './CustomerDashboard.css'
+import CartPage from './components/CartPage.jsx';
 
 // --- Placeholder Components ---
 // You should move these into their own files inside a 'pages' folder later.
@@ -30,6 +31,7 @@ function App() {
         <Route path="/customer/dashboard" element={<CustomerDashboard />} />
         <Route path="/dealer/dashboard" element={<DealerPage />} />
         <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
     </BrowserRouter>
   );
