@@ -3,6 +3,7 @@ import AuthForm from './components/AuthForm';
 import CustomerDashboard from './pages/CustomerDashboard.jsx';
 import './index.css'
 import DealerPage from './pages/DealerPage.jsx';
+
 import './CustomerDashboard.css'
 import CartPage from './components/CartPage.jsx';
 
