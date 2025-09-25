@@ -33,11 +33,20 @@ const Cart = ({ cartItems, onRemove, onCheckout }) => {
 
 function CustomerDashboard() {
     const [products, setProducts] = useState([]);
-    const [cartItems, setCartItems] = useState([]);
+    const [cartItems, setCartItems] = useState(() => {
+        // Initialize cart from localStorage
+        const savedCart = localStorage.getItem('cartItems');
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
 
     const API_URL = 'http://localhost:5000';
+
+    // Save cart to localStorage whenever cartItems changes
+    useEffect(() => {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }, [cartItems]);
 
    
     const handleAddToCart = (product, quantity) => {
@@ -71,7 +80,8 @@ function CustomerDashboard() {
             await axios.post(`${API_URL}/api/orders`, body, config);
             
             setMessage('Order placed successfully!');
-            setCartItems([]); 
+            setCartItems([]);
+            localStorage.removeItem('cartItems'); // Clear cart from localStorage 
         } catch (error) {
             setError('Failed to place order. Please try again.');
         }
