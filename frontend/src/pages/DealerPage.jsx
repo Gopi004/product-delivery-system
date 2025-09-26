@@ -111,7 +111,7 @@ function DealerPage(){
                 {close => (
                     <div className="modal">
                         <button className="form-close-btn" onClick={close}>&times;</button>
-                        <h3>{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
+                        <h3 className="form-heading">{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
                         <form className="new-product-form" onSubmit={handleSubmit}>
                          
                             <input className="new-product-name" type="text" name="name" placeholder="Name" value={formData.name} onChange={handleInput} required />
