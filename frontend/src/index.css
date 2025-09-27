@@ -93,7 +93,7 @@ nav{
     justify-content: space-between;
     align-items: center;
     padding: 0 2vw;
-    background-color: rgb(154, 192, 204);
+    background-color: rgb(173, 215, 228);
     border-radius: 20px;
     width: 45vw;
     margin: 3vh;
@@ -177,6 +177,9 @@ form input, form textarea{
     font-weight: 600;
     cursor: pointer;
 }
+.form-heading{
+    text-align: center;
+}
 textarea{
     padding-top: 2vh;
 }
@@ -185,9 +188,14 @@ textarea{
     width: 80vw;
     padding: 2vh;
     border-radius: 20px;
-    background-color: rgb(170, 167, 167);
-    display: grid;
-    grid-template-columns: repeat(3,9fr);
+    background-color: rgb(217, 214, 214);
+}
 
-    justify-items: center;
+.dealer-actions{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 1vw;
 }
