@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 
 const CartContext = createContext();
 
@@ -9,6 +10,10 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  
+  const API_URL = 'http://localhost:5000';
   
  useEffect(() => {
    try {
@@ -50,28 +55,51 @@ export const CartProvider = ({ children }) => {
     };
    
   const handleCheckout = async () => {
+        console.log('Checkout function called from CartContext!'); // Debug log
+        
         if(cartItems.length === 0) {
             setError("Your cart is empty.");
             return;
         }
+        
+        // Clear previous messages
+        setError('');
+        setMessage('');
+        
         try {
             const token = localStorage.getItem('token');
+            console.log('Token found:', !!token); // Debug log
+            
+            if (!token) {
+                setError('Please log in to place an order.');
+                return;
+            }
+            
             const config = { headers: { Authorization: `Bearer ${token}` } };
             const body = { cartItems };
 
-            await axios.post(`${API_URL}/api/orders`, body, config);
+            console.log('Sending order request...'); // Debug log
+            const response = await axios.post(`${API_URL}/api/orders`, body, config);
+            console.log('Order response:', response.data); // Debug log
             
             setMessage('Order placed successfully!');
             setCartItems([]);
             localStorage.removeItem('cartItems'); // Clear cart from localStorage 
         } catch (error) {
-            setError('Failed to place order. Please try again.');
+            console.error('Checkout error:', error.response?.data || error.message); // Debug log
+            if (error.response?.status === 401) {
+                setError('Authentication failed. Please log in again.');
+            } else if (error.response?.status === 400) {
+                setError(error.response.data.message || 'Invalid order data.');
+            } else {
+                setError('Failed to place order. Please try again.');
+            }
         }
     };
   
   const updateQuantity = (productId, newQuantity) => {
   if (newQuantity < 1) {
-    // If quantity is less than 1, remove the item completely.
+   
     handleRemoveFromCart(productId);
   } else {
     setCartItems(prevItems =>
@@ -89,7 +117,11 @@ export const CartProvider = ({ children }) => {
     addToCart,
     handleRemoveFromCart,
     handleCheckout,
-    updateQuantity
+    updateQuantity,
+    error,
+    message,
+    setError,
+    setMessage
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
