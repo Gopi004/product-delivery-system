@@ -15,10 +15,12 @@
     "gsap": "^3.13.0",
     "motion": "^12.23.16",
     "ogl": "^1.0.11",
+    "postprocessing": "^6.37.8",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
-    "reactjs-popup": "^2.0.6"
+    "reactjs-popup": "^2.0.6",
+    "three": "^0.180.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
