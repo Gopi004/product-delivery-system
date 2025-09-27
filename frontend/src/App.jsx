@@ -6,7 +6,6 @@ import DealerPage from './pages/DealerPage.jsx';
 import { CartProvider } from './components/CartContext.jsx';
 import './CustomerDashboard.css'
 import CartPage from './components/CartPage.jsx';
-import Threads from './components/Threads.jsx';
 
 // --- Placeholder Components ---
 // You should move these into their own files inside a 'pages' folder later.
