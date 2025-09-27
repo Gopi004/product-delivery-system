@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import addCartIcon from "../assets/add_to_cart.png";
 import { useCart } from "./CartContext";
 
-const Card = ({ product, view, onAddToCart, onEdit, onDelete }) => {
-    
+const Card = ({ product, view, onEdit, onDelete }) => {
+    const {addToCart} = useCart();
     const [quantity, setQuantity] = useState(1);
-    const { addToCart } = useCart();
     const handleIncrement = () => {
         setQuantity(prevQuantity => prevQuantity + 1);
     };
@@ -35,7 +34,7 @@ const Card = ({ product, view, onAddToCart, onEdit, onDelete }) => {
                                 <span>{quantity}</span>
                                 <button onClick={handleIncrement}>+</button>
                             </div>
-                            <button className="action-button icon-button" onClick={() => onAddToCart(product, quantity)}>
+                            <button className="action-button icon-button" onClick={() => addToCart(product, quantity)}>
                                 <img src={addCartIcon} alt="cart-image" className="cart-icon"/>
                             </button>
                         </>

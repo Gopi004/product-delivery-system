@@ -2,7 +2,7 @@ import React from "react";
 import Card from "./Card";
 
 
-const CardGrid = ({ products, actor, onAddToCart, onEdit, onDelete }) => {
+const CardGrid = ({ products, actor,onEdit, onDelete }) => {
     return (
         <div className="card-grid">
             {products.map(product => (
@@ -10,7 +10,7 @@ const CardGrid = ({ products, actor, onAddToCart, onEdit, onDelete }) => {
                     key={product.product_id} 
                     product={product} 
                     view={actor}
-                    onAddToCart={onAddToCart}
+                    
                     onEdit={onEdit}
                     onDelete={onDelete}
                 />
