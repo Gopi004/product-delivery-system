@@ -79,4 +79,53 @@ const createOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder };
+const getDealerOrders= async (req,res) =>{
+  const dealerId = req.user.id;
+
+  try
+  {
+     const [orders] = await pool.query(`
+            SELECT DISTINCT
+                o.order_id,
+                o.order_date,
+                o.status,
+                o.total_amount,
+                c.name AS customer_name,
+                c.email AS customer_email,
+                c.address AS customer_address
+            FROM orders o
+            JOIN customers c ON o.customer_id = c.customer_id
+            JOIN orderdetails od ON o.order_id = od.order_id
+            JOIN products p ON od.product_id = p.product_id
+            WHERE
+                p.dealer_id = ? AND
+                o.status IN ('Pending', 'Processing')
+            ORDER BY o.order_date DESC;
+        `, [dealerId]);
+
+         for (let order of orders) {
+      const [items] = await pool.query(`
+        SELECT 
+          p.name as product_name,
+          od.quantity,
+          od.price
+        FROM orderdetails od
+        JOIN products p ON od.product_id = p.product_id
+        WHERE od.order_id = ? AND p.dealer_id = ?
+      `, [order.order_id, dealerId]);
+      
+      order.items = items;
+    }
+
+
+    
+        res.json(orders);    
+  }
+  catch(error)
+  {
+     console.error('Error fetching dealer orders:', error);
+    res.status(500).json({message : "Server Error"});
+  }
+}
+
+module.exports = { createOrder, getDealerOrders };
