@@ -5,48 +5,6 @@ import { useCart } from "../components/CartContext.jsx";
 import axios from 'axios';
 
 
-const Cart = ({ cartItems, onRemove, onCheckout, error, message }) => {
-    const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-
-    return (
-        <div className="cart-container">
-            <h2>Shopping Cart 🛒</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {message && <p style={{ color: 'green' }}>{message}</p>}
-            {cartItems.length === 0 ? (
-                <p>Your cart is empty.</p>
-            ) : (
-                <>
-                    <ul>
-                        {cartItems.map(item => (
-                            <li key={item.product_id}>
-                                {item.name} - ${item.price} x {item.quantity}
-                                <button onClick={() => onRemove(item.product_id)}>Remove</button>
-                            </li>
-                        ))}
-                    </ul>
-                    <h3>Total: ${totalPrice.toFixed(2)}</h3>
-                    <button 
-                        onClick={(e) => {
-                            e.preventDefault();
-                            console.log('Checkout button clicked in Cart component');
-                            if (onCheckout && typeof onCheckout === 'function') {
-                                onCheckout();
-                            } else {
-                                console.error('onCheckout is not a function');
-                            }
-                        }}
-                        type="button"
-                    >
-                        Proceed to Checkout
-                    </button>
-                </>
-            )}
-        </div>
-    );
-};
-
-
 function CustomerDashboard() {
     const [products, setProducts] = useState([]);
     const [productError, setProductError] = useState('');
@@ -79,29 +37,22 @@ function CustomerDashboard() {
 
 
     return (
-        <div className="customer-container">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden p-[4vh]">
+            <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-r from-purple-600/10 to-pink-600/10 rounded-full blur-3xl animate-pulse z-0"></div>
+            <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000 z-0"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-violet-600/8 to-fuchsia-600/8 rounded-full blur-2xl animate-pulse delay-500 z-0"></div>   
             <NavBar />
-            <div className="customer-body">
-                <h2>Products</h2>
-                <p>Browse our selection and add items to your cart.</p>
-                <hr />
+            <div className="mt-[15vh] mx-[7.5vw]">
+                <h2 className="text-white/80 text-[1.5rem] font-['Poetsen_One'] pb-2 ">Products</h2>
+                <hr className="mb-[3vh] text-white/50" />
                 {productError && <p style={{ color: 'red' }}>{productError}</p>}
-                
+                <div className="m-0 mx-[0vw] w-[80vw] rounded-[15px] bg-gray-900/70 flex flex-col items-center pb-[5vh] ">
                 <CardGrid 
                     products={products}
                     actor="customer"
                     onAddToCart={addToCart}
                 />
-                
-                <hr />
-                
-                <Cart 
-                    cartItems={cartItems}
-                    onRemove={handleRemoveFromCart}
-                    onCheckout={handleCheckout}
-                    error={error}
-                    message={message}
-                />
+                </div>
             </div>
         </div>
     );

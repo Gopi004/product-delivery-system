@@ -34,7 +34,8 @@ const Card = ({ product, view, onEdit, onDelete }) => {
                                 <span>{quantity}</span>
                                 <button onClick={handleIncrement}>+</button>
                             </div>
-                            <button className="action-button icon-button" onClick={() => addToCart(product, quantity)}>
+                            <button className="icon-button" onClick={() => addToCart(product, quantity)}>
+                                <text>ADD TO CART</text>
                                 <img src={addCartIcon} alt="cart-image" className="cart-icon"/>
                             </button>
                         </>

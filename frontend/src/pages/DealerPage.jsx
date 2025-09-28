@@ -195,7 +195,7 @@ function DealerPage(){
                 {/* Products Tab */}
                 {activeTab === 'products' && (
                     <div>
-                        <h3 className="text-white/80 text-[1.5rem] font-['Poetsen_One'] ">My Products</h3>
+                        <h3 className="text-white/80 text-[1.5rem] font-['Poetsen_One'] pb-2 ">My Products</h3>
                         <hr className="mb-[3vh] text-white/50" />
                         <div className="m-0 mx-[0vw] w-[80vw] rounded-[15px] bg-gray-900/70 flex flex-col items-center pb-[9vh]">
                             <CardGrid 
