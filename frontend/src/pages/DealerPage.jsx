@@ -142,58 +142,49 @@ function DealerPage(){
     };
     
     return (
-        <div className="dealer-container">
-            <nav>
-                <p className="nav-header">PDS</p>
-                <div className="nav-right">
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden p-[4vh]">
+
+            <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-r from-purple-600/10 to-pink-600/10 rounded-full blur-3xl animate-pulse z-0"></div>
+            <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000 z-0"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-violet-600/8 to-fuchsia-600/8 rounded-full blur-2xl animate-pulse delay-500 z-0"></div>
+
+            <nav className="bg-gray-900/70 backdrop-blur-xl shadow-2xl border border-gray-700/50 p-4 overflow-hidden fixed top-0 left-1/4 z-[1000] flex flex-row justify-between items-center rounded-2xl w-[45vw] m-[3vh] mb-[5vh] font-['Poetsen_One'] text-green-50">
+                <p className="text-[1.5rem]">PDS</p>
+                <div className="flex flex-row justify-around items-center gap-[2vw]">
                     <p className="dealer-name">Hello, Dealer</p>
-                    <button onClick={handleAddClick}>Add Product</button>
+                    <button className="h-[6vh] border-none text-white rounded-lg font-['Poetsen_One'] font-thin cursor-pointer px-[1vw] bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 hover:from-purple-700 hover:via-violet-700 hover:to-pink-700 transform hover:scale-105" 
+                        onClick={handleAddClick}>Add Product
+                    </button>
                 </div>
             </nav>
 
             <Popup open={isPopupOpen} onClose={() => setIsPopupOpen(false)} modal nested>
                 {close => (
-                    <div className="modal">
-                        <button className="form-close-btn" onClick={close}>&times;</button>
-                        <h3 className="form-heading">{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
-                        <form className="new-product-form" onSubmit={handleSubmit}>
-                            <input className="new-product-name" type="text" name="name" placeholder="Name" value={formData.name} onChange={handleInput} required />
-                            <textarea className="new-product-desc" name="description" placeholder="Description" value={formData.description} onChange={handleInput} required></textarea>
-                            <input className="new-product-price" type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInput} required />
-                            <input className="new-product-stock" type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleInput} required />
-                            <button className="save-btn" type="submit">{editingProduct ? 'Update Product' : 'Save Product'}</button>
+                    <div className="m-0 p-[2vh] rounded-[15px] bg-gray-900/70">
+                        
+                        <button className="border-none rounded-4xl font-['Poetsen_One'] font-semibold cursor-pointer bg-white w-6" onClick={close}>&times;</button>
+                        <h3 className="font-['Poetsen_One'] text-white text-center text-[1.5rem]">{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
+                        <form className="p-[2vh] flex flex-col items-center gap-[3vh]" onSubmit={handleSubmit}>
+                            <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="text" name="name" placeholder="Name" value={formData.name} onChange={handleInput} required />
+                            <textarea className="border-none h-[8vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500 content-center" name="description" placeholder="Description" value={formData.description} onChange={handleInput} required></textarea>
+                            <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInput} required />
+                            <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleInput} required />
+                            <button className="h-[6vh] border-none bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 hover:from-purple-700 hover:via-violet-700 hover:to-pink-700 transform hover:scale-105 rounded-[10px] font-['Poetsen_One'] px-4 cursor-pointer font-thin text-white " type="submit">{editingProduct ? 'Update Product' : 'Save Product'}</button>
                         </form>
                     </div>
                 )}
             </Popup>
 
-            <div className="dealer-body">
+            <div className="mt-[15vh] mx-[7.5vw]">
                 {/* Tab Navigation */}
-                <div className="tab-navigation" style={{ marginBottom: '20px' }}>
-                    <button 
+                <div className="flex flex-row justify-end items-center gap-[1vw] mr-2">
+                    <button className="text-white text-[1rem] font-['Poetsen_One'] border-none bg-purple-600 transform hover:scale-105 rounded-[10px] p-3 cursor-pointer"
                         onClick={() => setActiveTab('products')}
-                        style={{
-                            padding: '10px 20px',
-                            marginRight: '10px',
-                            backgroundColor: activeTab === 'products' ? '#007bff' : '#f8f9fa',
-                            color: activeTab === 'products' ? 'white' : '#333',
-                            border: '1px solid #ddd',
-                            borderRadius: '5px',
-                            cursor: 'pointer'
-                        }}
                     >
                         My Products ({products.length})
                     </button>
-                    <button 
+                    <button className="text-white text-[1rem] font-['Poetsen_One'] border-none bg-violet-600 transform hover:scale-105 rounded-[10px] p-3 cursor-pointer"
                         onClick={() => setActiveTab('orders')}
-                        style={{
-                            padding: '10px 20px',
-                            backgroundColor: activeTab === 'orders' ? '#007bff' : '#f8f9fa',
-                            color: activeTab === 'orders' ? 'white' : '#333',
-                            border: '1px solid #ddd',
-                            borderRadius: '5px',
-                            cursor: 'pointer'
-                        }}
                     >
                         Customer Orders ({orders.length})
                     </button>
@@ -204,9 +195,9 @@ function DealerPage(){
                 {/* Products Tab */}
                 {activeTab === 'products' && (
                     <div>
-                        <h3>My Products</h3>
-                        <hr />
-                        <div className="content">
+                        <h3 className="text-white/80 text-[1.5rem] font-['Poetsen_One'] ">My Products</h3>
+                        <hr className="mb-[3vh] text-white/50" />
+                        <div className="m-0 mx-[0vw] w-[80vw] rounded-[15px] bg-gray-900/70 flex flex-col items-center pb-[9vh]">
                             <CardGrid 
                                 products={products}
                                 actor="dealer"
