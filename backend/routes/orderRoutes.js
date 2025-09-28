@@ -5,4 +5,6 @@ const {protect, restrictTo} = require("../middleware/authMiddleware");
 
 router.post("/",protect,restrictTo('customer'),orderController.createOrder);
 router.get("/dealer-orders",protect,restrictTo('dealer'),orderController.getDealerOrders);
+router.put("/:id/assign",protect,restrictTo('dealer'),orderController.assignDelivery);
+
 module.exports= router;

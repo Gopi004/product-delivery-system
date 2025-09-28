@@ -128,4 +128,62 @@ const getDealerOrders= async (req,res) =>{
   }
 }
 
-module.exports = { createOrder, getDealerOrders };
+const assignDelivery = async (req,res) =>{
+  const dealerId= req.user.id;
+  const { personnelId }=req.body;
+  const {id : orderId }=req.params;
+  
+  
+  if (!personnelId) {
+        return res.status(400).json({ message: 'Delivery personnel ID is required.' });
+    }
+
+  const connection = await pool.getConnection();
+  try
+  {
+     await connection.beginTransaction();
+
+      const [orderCheck] = await connection.query(`
+            SELECT o.status FROM orders o
+            JOIN orderdetails od ON o.order_id = od.order_id
+            JOIN products p ON od.product_id = p.product_id
+            WHERE o.order_id = ? AND p.dealer_id = ?
+            LIMIT 1;
+        `, [orderId, dealerId]);
+
+         
+        if (orderCheck.length === 0) {
+            throw new Error('Order not found or you are not authorized to assign it.');
+        }
+        
+        if (orderCheck[0].status !== 'Pending') { 
+             throw new Error('Order cannot be assigned as it is not in a pending state.');
+        }
+
+        await connection.query("UPDATE orders SET status='Shipped' WHERE order_id=?",orderId);
+
+        await connection.query("INSERT INTO deliveries(order_id,personnel_id,status) VALUES (?,?,?)",[orderId,personnelId,'Out for Delivery']);
+
+        await connection.query("UPDATE deliverypersonnel SET availability_status = 'On Delivery' WHERE personnel_id = ?",[personnelId]);
+
+        await connection.commit();
+        res.json({ message: 'Delivery person assigned successfully.' });
+  } 
+  catch(err)
+  {
+    await connection.rollback();
+    console.log(err);
+
+    if (err.message.includes('not found or not authorized') || err.message.includes('not in a pending state')) {
+            return res.status(403).json({ message: err.message });
+        }
+    res.status(500).json({message : "Server Error"});
+  }
+  finally
+  {
+    connection.release();
+  }
+
+}
+
+module.exports = { createOrder, getDealerOrders, assignDelivery };

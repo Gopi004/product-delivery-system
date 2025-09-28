@@ -56,12 +56,14 @@ const updateDeliveryStatus = async (req, res) => {
         "SELECT order_id from deliveries where delivery_id=?",
         [deliveryId]
       );
-      
+
       const orderId = order[0].order_id;
       await connection.query(
         "UPDATE orders SET status='Delivered' WHERE order_id=?",
         [orderId]
       );
+
+      await connection.query("UPDATE deliverypersonnel SET availability_status='Available' WHERE personnel_id=?",[personnelId]);
     }
 
     await connection.commit();
@@ -80,4 +82,18 @@ const updateDeliveryStatus = async (req, res) => {
   }
 };
 
-module.exports = { updateDeliveryStatus, getMyDeliveries };
+const getDeliveryPersonnel = async (req,res) =>
+{
+  try
+  {
+  const [personnel]= await pool.query("SELECT personnel_id,name from deliverypersonnel WHERE availability_status = 'Available'");
+  res.json(personnel);
+  }
+  catch(err)
+  {
+    console.log(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+}
+
+module.exports = { updateDeliveryStatus, getMyDeliveries , getDeliveryPersonnel };
