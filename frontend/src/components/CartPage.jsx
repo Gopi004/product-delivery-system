@@ -2,6 +2,7 @@
 import React from 'react';
  // You'll need to create this CSS file for styling
 import { useCart } from './CartContext';
+import NavBar from './NavBar';
 
 const CartPage = () => {
  
@@ -10,6 +11,8 @@ const CartPage = () => {
   const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
    console.log('Current Cart Items:', cartItems);
   return (
+    <div>
+      <NavBar />
     <div className="cart-page">
       <h1>Your Shopping Cart</h1>
       <div className='cart-layout'>
@@ -55,6 +58,7 @@ const CartPage = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 };
 
