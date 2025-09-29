@@ -9,10 +9,15 @@ function DealerPage(){
     const [formData,setformData] = useState({name:"",description:"",price:"",stock:""});
     const [products,setProducts]=useState([]);
     const [orders, setOrders] = useState([]);
+    const [deliveryPersonnel, setDeliveryPersonnel] = useState([]);
     const [activeTab, setActiveTab] = useState('products'); // 'products' or 'orders'
     const [error, setError] = useState('');
     const [editingProduct, setEditingProduct] = useState(null); 
-    const [isPopupOpen, setIsPopupOpen] = useState(false); 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [assigningOrder, setAssigningOrder] = useState(null);
+    const [isAssignPopupOpen, setIsAssignPopupOpen] = useState(false);
+    const [selectedPersonnel, setSelectedPersonnel] = useState('');
+    const [orderFilter, setOrderFilter] = useState('all'); // 'all', 'pending', 'assigned', 'delivered'
 
     const createApiConfig = () => {
         const token = localStorage.getItem('token');
@@ -40,17 +45,33 @@ function DealerPage(){
             setError('');
             const config = createApiConfig();
             const response = await axios.get("http://localhost:5000/api/orders/dealer-orders", config);
+            console.log('Orders fetched from backend:', response.data);
+            console.log('Orders count:', response.data.length);
             setOrders(response.data);
         } catch(err) {
-            console.error(err);
+            console.error('Error fetching orders:', err);
             setError("Failed to fetch orders");
+        }
+    }
+
+    const fetchDeliveryPersonnel = async () => {
+        try {
+            const config = createApiConfig();
+            const response = await axios.get("http://localhost:5000/api/delivery/delivery-personnel", config);
+            setDeliveryPersonnel(response.data);
+        } catch(err) {
+            console.error(err);
+            setError("Failed to fetch delivery personnel");
         }
     }
 
     useEffect(() => {
         fetchProducts();
         fetchOrders();
+        fetchDeliveryPersonnel();
     }, []);
+
+
 
     function handleInput(e){
         const { name, value } = e.target;
@@ -103,6 +124,59 @@ function DealerPage(){
         }
     };
 
+   
+    const handleAssignClick = (order) => {
+        setAssigningOrder(order);
+        setSelectedPersonnel('');
+        setIsAssignPopupOpen(true);
+    };
+
+    const handleAssignDelivery = async (e) => {
+        e.preventDefault();
+        if (!selectedPersonnel) {
+            setError('Please select a delivery personnel');
+            return;
+        }
+
+        try {
+            setError('');
+            const config = createApiConfig();
+            await axios.put(`http://localhost:5000/api/orders/${assigningOrder.order_id}/assign`, {
+                personnelId: selectedPersonnel
+            }, config);
+            
+            setIsAssignPopupOpen(false);
+            setAssigningOrder(null);
+            setSelectedPersonnel('');
+            fetchOrders(); // Refresh orders list
+            fetchDeliveryPersonnel(); // Refresh delivery personnel list
+            alert('Delivery assigned successfully!');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to assign delivery');
+        }
+    };
+
+    // Filter button handlers
+    const handleFilterAll = () => {
+        console.log('All Orders button clicked - current filter:', orderFilter, 'total orders:', orders.length);
+        setOrderFilter('all');
+        console.log('Filter set to all');
+    };
+
+    const handleFilterPending = () => {
+        setOrderFilter('pending');
+    };
+
+    const handleFilterAssigned = () => {
+        setOrderFilter('assigned');
+    };
+
+    const handleFilterDelivered = () => {
+        setOrderFilter('delivered');
+    };
+
+
+
     const formatDate = (dateString) => {
         try {
             
@@ -140,7 +214,23 @@ function DealerPage(){
             default: return '#9e9e9e';
         }
     };
-    
+
+    // Filter orders based on selected filter
+    console.log('Current orderFilter:', orderFilter, 'Total orders:', orders.length);
+    const filteredOrders = orderFilter === 'all' 
+        ? orders 
+        : orders.filter(order => {
+            switch(orderFilter) {
+                case 'pending': return order.status === 'Pending' || order.status === 'Processing' || !order.status;
+                case 'assigned': return order.status === 'Shipped';
+                case 'delivered': return order.status === 'Delivered';
+                default: 
+                    return true;
+            }
+        });
+        
+    console.log('Filtered orders count:', filteredOrders.length);
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden p-[4vh]">
 
@@ -175,7 +265,48 @@ function DealerPage(){
                 )}
             </Popup>
 
-            <div className="mt-[15vh] mx-[7.5vw]">
+            {/* Assign Delivery Popup */}
+            <Popup open={isAssignPopupOpen} onClose={() => setIsAssignPopupOpen(false)} modal nested>
+                {close => (
+                    <div className="m-0 p-[2vh] rounded-[15px] bg-gray-900/70">
+                        <button className="border-none rounded-4xl font-['Poetsen_One'] font-semibold cursor-pointer bg-white w-6" onClick={close}>&times;</button>
+                        <h3 className="font-['Poetsen_One'] text-white text-center text-[1.5rem]">
+                            Assign Delivery for Order #{assigningOrder?.order_id}
+                        </h3>
+                        <div className="p-[2vh]">
+                            <div className="mb-4 p-4 bg-gray-800/50 rounded-lg border border-gray-600/50">
+                                <h4 className="text-white mb-2">Order Details:</h4>
+                                <p className="text-gray-300 text-sm">Customer: {assigningOrder?.customer_name}</p>
+                                <p className="text-gray-300 text-sm">Address: {assigningOrder?.customer_address}</p>
+                                <p className="text-gray-300 text-sm">Total: ${assigningOrder?.total_amount}</p>
+                            </div>
+                            <form onSubmit={handleAssignDelivery} className="flex flex-col items-center gap-[3vh]">
+                                <select 
+                                    value={selectedPersonnel} 
+                                    onChange={(e) => setSelectedPersonnel(e.target.value)}
+                                    className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white"
+                                    required
+                                >
+                                    <option value="">Select Delivery Personnel</option>
+                                    {deliveryPersonnel.map(person => (
+                                        <option key={person.personnel_id} value={person.personnel_id}>
+                                            {person.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <button 
+                                    type="submit"
+                                    className="h-[6vh] border-none bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 hover:from-green-700 hover:via-emerald-700 hover:to-teal-700 transform hover:scale-105 rounded-[10px] font-['Poetsen_One'] px-4 cursor-pointer font-thin text-white"
+                                >
+                                    Assign Delivery
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                )}
+            </Popup>
+
+            <div className="relative z-10 mt-[15vh] mx-[7.5vw]">
                 {/* Tab Navigation */}
                 <div className="flex flex-row justify-end items-center gap-[1vw] mr-2">
                     <button className="text-white text-[1rem] font-['Poetsen_One'] border-none bg-purple-600 transform hover:scale-105 rounded-[10px] p-3 cursor-pointer"
@@ -211,23 +342,110 @@ function DealerPage(){
                 {/* Orders Tab */}
                 {activeTab === 'orders' && (
                     <div>
-                        <h3>Customer Orders</h3>
-                        <hr />
-                        {orders.length === 0 ? (
-                            <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
-                                <h4>📦 No Orders Yet</h4>
-                                <p>Orders from customers will appear here</p>
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-white/80 text-[1.5rem] font-['Poetsen_One']">Customer Orders</h3>
+                            <div className="flex gap-2">
+                                <div className="text-xs text-gray-400 bg-gray-800/50 px-3 py-1 rounded-lg">
+                                    📋 Total: {orders.length}
+                                </div>
+                                <div className="text-xs text-orange-400 bg-gray-800/50 px-3 py-1 rounded-lg">
+                                    ⏳ Pending Assignment: {orders.filter(o => o.status === 'Pending' || !o.status).length}
+                                </div>
+                                <div className="text-xs text-blue-400 bg-gray-800/50 px-3 py-1 rounded-lg">
+                                    🚚 In Delivery: {orders.filter(o => o.status === 'Shipped').length}
+                                </div>
+                                <div className="text-xs text-green-400 bg-gray-800/50 px-3 py-1 rounded-lg">
+                                    ✅ Completed: {orders.filter(o => o.status === 'Delivered').length}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Order Filters */}
+                        <div className="flex gap-3 mb-6">
+                            <button
+
+                               onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleFilterAll();
+                                }}
+                             
+                                className={`px-5 py-3 rounded-xl font-inter text-[15px] font-medium tracking-wider uppercase transition-all duration-300 ease-in-out border-2 ${
+                                    orderFilter === 'all'
+                                        ? 'bg-gradient-to-br from-purple-500 via-violet-500 to-purple-400 text-white font-semibold border-purple-400/30 shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30'
+                                        : 'bg-gray-800/60 text-gray-300 border-gray-600/30 shadow-sm hover:bg-gray-700/70 hover:text-gray-200 hover:-translate-y-0.5 hover:shadow-md'
+                                }`}
+                            >
+                                📋 All Orders ({orders.length})
+                            </button>
+                            
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleFilterPending();
+                                }}
+                                className={`px-5 py-3 rounded-xl font-inter text-[15px] font-medium tracking-wider uppercase transition-all duration-300 ease-in-out border-2 ${
+                                    orderFilter === 'pending'
+                                        ? 'bg-gradient-to-br from-orange-500 via-red-500 to-red-600 text-white font-semibold border-orange-400/30 shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30'
+                                        : 'bg-gray-800/60 text-gray-300 border-gray-600/30 shadow-sm hover:bg-gray-700/70 hover:text-gray-200 hover:-translate-y-0.5 hover:shadow-md'
+                                }`}
+                            >
+                                ⚡ Needs Assignment ({orders.filter(o => o.status === 'Pending' || !o.status).length})
+                            </button>
+                            
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleFilterAssigned();
+                                }}
+                                className={`px-5 py-3 rounded-xl font-inter text-[15px] font-medium tracking-wider uppercase transition-all duration-300 ease-in-out border-2 ${
+                                    orderFilter === 'assigned'
+                                        ? 'bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 text-white font-semibold border-blue-400/30 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30'
+                                        : 'bg-gray-800/60 text-gray-300 border-gray-600/30 shadow-sm hover:bg-gray-700/70 hover:text-gray-200 hover:-translate-y-0.5 hover:shadow-md'
+                                }`}
+                            >
+                                � In Delivery ({orders.filter(o => o.status === 'Shipped').length})
+                            </button>
+                            
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleFilterDelivered();
+                                }}
+                                className={`px-5 py-3 rounded-xl font-inter text-[15px] font-medium tracking-wider uppercase transition-all duration-300 ease-in-out border-2 ${
+                                    orderFilter === 'delivered'
+                                        ? 'bg-gradient-to-br from-green-500 via-green-600 to-green-700 text-white font-semibold border-green-400/30 shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/30'
+                                        : 'bg-gray-800/60 text-gray-300 border-gray-600/30 shadow-sm hover:bg-gray-700/70 hover:text-gray-200 hover:-translate-y-0.5 hover:shadow-md'
+                                }`}
+                            >
+                                ✨ Completed ({orders.filter(o => o.status === 'Delivered').length})
+                            </button>
+                        </div>
+
+                        <hr className="mb-[3vh] text-white/50" />
+                        {filteredOrders.length === 0 ? (
+                            <div className="text-center p-[40px] text-white/60 bg-gray-900/50 rounded-2xl backdrop-blur-xl border border-gray-700/50">
+                                <h4 className="text-2xl mb-4">📦 No Orders</h4>
+                                <p>{orderFilter === 'all' ? 'No orders from customers yet' : `No ${orderFilter} orders found`}</p>
                             </div>
                         ) : (
                             <div className="orders-container">
-                                {orders.map(order => (
-                                    <div key={order.order_id} className="order-card" style={{
-                                        border: '1px solid #ddd',
-                                        borderRadius: '8px',
-                                        padding: '20px',
-                                        marginBottom: '20px',
-                                        backgroundColor: '#f9f9f9'
-                                    }}>
+                                {filteredOrders.map(order => (
+                                    <div key={order.order_id} className={`order-card backdrop-blur-xl rounded-2xl p-5 mb-5 shadow-2xl border ${
+                                        (order.status === 'Pending' || !order.status) 
+                                        ? 'bg-orange-900/20 border-orange-500/50' 
+                                        : 'bg-gray-900/60 border-gray-700/50'
+                                    }`}>
+                                        {/* Priority Badge for Pending Orders */}
+                                        {(order.status === 'Pending' || !order.status) && (
+                                            <div className="mb-3 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-orange-600/20 border border-orange-500/30 text-orange-400">
+                                                🔥 Needs Assignment
+                                            </div>
+                                        )}
+                                        
                                         {/* Order Header */}
                                         <div style={{ 
                                             display: 'flex', 
@@ -238,84 +456,88 @@ function DealerPage(){
                                             paddingBottom: '10px'
                                         }}>
                                             <div>
-                                                <h4 style={{ margin: '0', color: '#333' }}>
+                                                <h4 className="text-white text-xl font-bold mb-1">
                                                     Order #{order.order_id}
                                                 </h4>
-                                                <p style={{ margin: '5px 0', color: '#666', fontSize: '14px' }}>
+                                                <p className="text-gray-300 text-sm">
                                                     {formatDate(order.order_date)}
                                                 </p>
                                             </div>
                                             <div style={{ textAlign: 'right' }}>
-                                                <span style={{
-                                                    padding: '5px 12px',
-                                                    borderRadius: '20px',
-                                                    color: 'white',
-                                                    fontSize: '12px',
-                                                    fontWeight: 'bold',
-                                                    backgroundColor: getStatusColor(order.status)
-                                                }}>
-                                                    {order.status?.toUpperCase() || 'PENDING'}
-                                                </span>
-                                                <p style={{ margin: '5px 0', fontWeight: 'bold', fontSize: '16px' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                                                    <span style={{
+                                                        padding: '5px 12px',
+                                                        borderRadius: '20px',
+                                                        color: 'white',
+                                                        fontSize: '12px',
+                                                        fontWeight: 'bold',
+                                                        backgroundColor: getStatusColor(order.status)
+                                                    }}>
+                                                        {order.status?.toUpperCase() || 'PENDING'}
+                                                    </span>
+                                                    {(order.status === 'Pending' || order.status === 'Processing' || !order.status) && (
+                                                        <button
+                                                            onClick={() => handleAssignClick(order)}
+                                                            style={{
+                                                                padding: '6px 12px',
+                                                                backgroundColor: '#28a745',
+                                                                color: 'white',
+                                                                border: 'none',
+                                                                borderRadius: '8px',
+                                                                fontSize: '11px',
+                                                                cursor: 'pointer',
+                                                                fontWeight: 'bold',
+                                                                transition: 'all 0.3s ease'
+                                                            }}
+                                                            onMouseOver={(e) => e.target.style.backgroundColor = '#218838'}
+                                                            onMouseOut={(e) => e.target.style.backgroundColor = '#28a745'}
+                                                        >
+                                                            🚚 Assign Delivery
+                                                        </button>
+                                                    )}
+                                                </div>
+                                                <p className="text-purple-400 font-bold text-lg">
                                                     Total: ${order.total_amount}
                                                 </p>
                                             </div>
                                         </div>
 
                                         {/* Customer Info */}
-                                        <div style={{ marginBottom: '15px' }}>
-                                            <h5 style={{ margin: '0 0 8px 0', color: '#555' }}>
+                                        <div className="mb-4">
+                                            <h5 className="text-gray-200 font-semibold mb-2">
                                                 👤 Customer Details:
                                             </h5>
-                                            <div style={{ 
-                                                backgroundColor: 'white',
-                                                padding: '10px',
-                                                borderRadius: '4px',
-                                                fontSize: '14px'
-                                            }}>
-                                                <p style={{ margin: '2px 0' }}>
-                                                    <strong>Name:</strong> {order.customer_name}
+                                            <div className="bg-gray-800/50 p-3 rounded-lg border border-gray-600/30">
+                                                <p className="text-gray-300 text-sm mb-1">
+                                                    <strong className="text-white">Name:</strong> {order.customer_name}
                                                 </p>
-                                                <p style={{ margin: '2px 0' }}>
-                                                    <strong>Email:</strong> {order.customer_email}
+                                                <p className="text-gray-300 text-sm mb-1">
+                                                    <strong className="text-white">Email:</strong> {order.customer_email}
                                                 </p>
-                                                <p style={{ margin: '2px 0' }}>
-                                                    <strong>Phone:</strong> {order.customer_phone}
+                                                <p className="text-gray-300 text-sm mb-1">
+                                                    <strong className="text-white">Phone:</strong> {order.customer_phone}
                                                 </p>
-                                                <p style={{ margin: '2px 0' }}>
-                                                    <strong>Address:</strong> {order.customer_address}
+                                                <p className="text-gray-300 text-sm">
+                                                    <strong className="text-white">Address:</strong> {order.customer_address}
                                                 </p>
                                             </div>
                                         </div>
 
                                         {/* Order Items */}
                                         <div>
-                                            <h5 style={{ margin: '0 0 8px 0', color: '#555' }}>
+                                            <h5 className="text-gray-200 font-semibold mb-2">
                                                 📦 Ordered Items:
                                             </h5>
-                                            <div style={{ 
-                                                backgroundColor: 'white',
-                                                borderRadius: '4px',
-                                                overflow: 'hidden'
-                                            }}>
+                                            <div className="bg-gray-800/50 rounded-lg overflow-hidden border border-gray-600/30">
                                                 {order.items && order.items.map((item, index) => (
-                                                    <div key={index} style={{
-                                                        display: 'flex',
-                                                        justifyContent: 'space-between',
-                                                        alignItems: 'center',
-                                                        padding: '12px',
-                                                        borderBottom: index < order.items.length - 1 ? '1px solid #f0f0f0' : 'none'
-                                                    }}>
+                                                    <div key={index} className={`flex justify-between items-center p-3 ${index < order.items.length - 1 ? 'border-b border-gray-600/30' : ''}`}>
                                                         <div>
-                                                            <strong>{item.product_name}</strong>
-                                                            <div style={{ fontSize: '12px', color: '#666' }}>
+                                                            <div className="text-white font-semibold">{item.product_name}</div>
+                                                            <div className="text-gray-400 text-xs">
                                                                 ${item.price} × {item.quantity}
                                                             </div>
                                                         </div>
-                                                        <div style={{ 
-                                                            fontWeight: 'bold',
-                                                            color: '#007bff'
-                                                        }}>
+                                                        <div className="text-purple-400 font-bold">
                                                             ${(item.price * item.quantity).toFixed(2)}
                                                         </div>
                                                     </div>

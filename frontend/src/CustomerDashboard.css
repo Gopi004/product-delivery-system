@@ -59,6 +59,7 @@ body {
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease-in-out;
+  min-width: 20vw;
 }
 .card:hover {
   transform: translateY(-5px);
