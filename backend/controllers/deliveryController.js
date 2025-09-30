@@ -82,6 +82,37 @@ const updateDeliveryStatus = async (req, res) => {
   }
 };
 
+
+const getDeliveryHistory = async (req,res) =>
+{
+  const personnelId= req.user.id;
+  try
+  {
+   const [history] = await pool.query(`
+            SELECT 
+                d.delivery_id, 
+                d.delivery_date, 
+                d.status, 
+                o.order_id, 
+                o.total_amount,
+                c.name AS customer_name, 
+                c.address AS customer_address,
+                c.phone AS customer_phone
+            FROM deliveries d 
+            JOIN orders o ON d.order_id = o.order_id 
+            JOIN customers c ON c.customer_id = o.customer_id 
+            WHERE d.personnel_id = ? AND d.status = 'Delivered' 
+            ORDER BY d.delivery_date DESC
+        `, [personnelId]);
+    res.json(history);
+  }
+  catch(err)
+  {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+}
+
 const getDeliveryPersonnel = async (req,res) =>
 {
   try
@@ -96,4 +127,4 @@ const getDeliveryPersonnel = async (req,res) =>
   }
 }
 
-module.exports = { updateDeliveryStatus, getMyDeliveries , getDeliveryPersonnel };
+module.exports = { updateDeliveryStatus, getMyDeliveries , getDeliveryPersonnel , getDeliveryHistory};
