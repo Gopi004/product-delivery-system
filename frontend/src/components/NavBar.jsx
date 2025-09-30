@@ -6,7 +6,7 @@ const NavBar = ({ userType = "customer", userName, showAddButton = false, onAddC
     const defaultLinks = {
         customer: [
             { to: "/customer/dashboard", label: "Home" },
-            { to: "/history", label: "History" },
+            { to: "/customer/orders", label: "History" },
             { to: "/cart", label: "Cart" }
         ],
         dealer: [

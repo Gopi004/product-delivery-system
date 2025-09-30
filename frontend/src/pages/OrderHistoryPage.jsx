@@ -1,11 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import NavBar from "../components/NavBar";
 
 
-const History = () => {
+const OrderHistoryPage = () => {
     const [orders, setOrders] = useState([]);
     const [error, setError] = useState('');
+
     const createApiConfig = () => {
         const token = localStorage.getItem('token');
         return { 
@@ -14,8 +16,23 @@ const History = () => {
         };
     };
 
+    const fetchOrderHistory = async() =>
+    {
+        try
+        {
+        const config= createApiConfig();
+        const response = await axios.get('http://localhost:5000/api/orders/customer-orders', config);
+        setOrders(response.data);
+        }
+        catch(err)
+        {
+            console.log(err);
+            setError('Failed to fetch order history.');
+        }
+    }
 
         useEffect(() => {
+            fetchOrderHistory();
     }, []);
 
     const formatDate = (dateString) => {
@@ -56,7 +73,10 @@ const History = () => {
         };
         
     return (
+         
+        
         <div>
+              <NavBar userType="customer" />
                         <div className="flex mb-4">                            
                             <div className="flex gap-2">
                                 <div className="text-xs text-gray-400 bg-gray-800/50 px-3 py-1 rounded-lg">
@@ -157,4 +177,4 @@ const History = () => {
     );
 };
 
-export default History;
+export default OrderHistoryPage;

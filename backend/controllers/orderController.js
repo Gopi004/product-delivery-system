@@ -150,14 +150,6 @@ const getDealerOrders = async (req, res) => {
       order.items = items;
     }
 
-    console.log(
-      "Final orders being sent:",
-      orders.map((o) => ({
-        id: o.order_id,
-        status: o.status,
-        itemsCount: o.items.length,
-      }))
-    );
     res.json(orders);
   } catch (error) {
     console.error("Error fetching dealer orders:", error);

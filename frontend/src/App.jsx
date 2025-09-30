@@ -7,6 +7,7 @@ import { CartProvider } from './components/CartContext.jsx';
 import './CustomerDashboard.css'
 import CartPage from './components/CartPage.jsx';
 import DeliveryDashboard from './pages/DeliveryDashboard.jsx';
+import OrderHistoryPage from './pages/OrderHistoryPage.jsx';
 
 // --- Placeholder Components ---
 // You should move these into their own files inside a 'pages' folder later.
@@ -35,6 +36,7 @@ function App() {
         <Route path="/dealer/dashboard" element={<DealerPage />} />
         <Route path="/delivery/dashboard" element={<DeliveryDashboard />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/customer/orders" element={<OrderHistoryPage />} />
       </Routes>
     </BrowserRouter>
     </CartProvider>
