@@ -27,9 +27,10 @@ const addProduct = async (req,res) =>
 {
   const {name , description , price ,stock } = req.body;
   const dealer_Id=req.user.id;
+  const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
   try
   {
-    const [result]= await pool.query("INSERT INTO products(dealer_id,name,description, price , stock) VALUES(?,?,?,?,?)",[dealer_Id,name,description,price,stock]);
+    const [result]= await pool.query("INSERT INTO products(dealer_id,name,description, price , stock,image_url) VALUES(?,?,?,?,?,?)",[dealer_Id,name,description,price,stock,imageUrl]);
      res.status(201).json({ message: "Product added", productId: result.insertId });
   }
   catch(error)

@@ -18,7 +18,7 @@ const Card = ({ product, view, onEdit, onDelete }) => {
     return (
         <div className="card">
             <div className="image-container">
-                <img src={product.imageUrl} alt={product.name} className="product-image" />
+                <img src={`http://localhost:5000${product.image_url}`} alt={product.name} className="product-image" />
             </div>
 
             <div className="product-details">

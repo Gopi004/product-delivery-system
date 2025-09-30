@@ -22,6 +22,7 @@ function DealerPage(){
     const [selectedPersonnel, setSelectedPersonnel] = useState('');
     const [orderFilter, setOrderFilter] = useState('all'); // 'all', 'pending', 'assigned', 'delivered'
     const { logout:onLogout } = useAuth();
+    const [imageFile, setImageFile] = useState(null);
 
     const createApiConfig = () => {
         const token = localStorage.getItem('token');
@@ -93,9 +94,15 @@ function DealerPage(){
         setIsPopupOpen(true);
     };
 
+      const handleFileChange = (e) => {
+        setImageFile(e.target.files[0]);
+    };
+
+
     const handleAddClick = () => {
         setEditingProduct(null); 
         setformData({ name: "", description: "", price: "", stock: "" });
+        setImageFile(null); 
         setIsPopupOpen(true);
     };
 
@@ -112,8 +119,19 @@ function DealerPage(){
         }
     };
 
+     
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const data = new FormData();
+        data.append('name', formData.name);
+        data.append('description', formData.description);
+        data.append('price', formData.price);
+        data.append('stock', formData.stock);
+        if (imageFile) {
+            data.append('image', imageFile); // 'image' must match the name in your Multer middleware
+        }
+
         try {
             setError('');
             const config = createApiConfig();
@@ -121,7 +139,7 @@ function DealerPage(){
                 await axios.put(`http://localhost:5000/api/products/${editingProduct.product_id}`, formData, config);
                 toast.success('Product updated successfully!');
             } else {
-                await axios.post("http://localhost:5000/api/products",formData,config);
+                await axios.post("http://localhost:5000/api/products",data,config);
                 toast.success('Product added successfully!');
             }
             setIsPopupOpen(false); 
@@ -264,6 +282,31 @@ function DealerPage(){
                             <textarea className="border-none h-[8vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500 content-center" name="description" placeholder="Description" value={formData.description} onChange={handleInput} required></textarea>
                             <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInput} required />
                             <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleInput} required />
+                            {!editingProduct && ( // Only show for new products for simplicity
+                                <div className="flex flex-col items-center gap-2">
+                                    {imageFile && (
+                                        <div className="flex justify-center mb-2">
+                                            <img 
+                                                src={URL.createObjectURL(imageFile)} 
+                                                alt="Preview" 
+                                                className="w-24 h-24 object-cover rounded-lg border-2 border-purple-500/50 shadow-lg"
+                                            />
+                                        </div>
+                                    )}
+                                    <input 
+                                        id="image-upload"
+                                        type="file" 
+                                        name="image" 
+                                        onChange={handleFileChange}
+                                        accept="image/*"
+                                        className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700 cursor-pointer"
+                                        required 
+                                    />
+                                    <p className="text-gray-400 text-xs text-center">
+                                        Max size: 5MB. Supported: JPG, PNG, GIF, WebP
+                                    </p>
+                                </div>
+                            )}
                             <button className="h-[6vh] border-none bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 hover:from-purple-700 hover:via-violet-700 hover:to-pink-700 transform hover:scale-105 rounded-[10px] font-['Poetsen_One'] px-4 cursor-pointer font-thin text-white " type="submit">{editingProduct ? 'Update Product' : 'Save Product'}</button>
                         </form>
                     </div>
