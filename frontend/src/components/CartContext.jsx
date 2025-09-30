@@ -90,6 +90,7 @@ export const CartProvider = ({ children }) => {
             toast.success('Order placed successfully!');
         } catch (error) {
             console.error('Checkout error:', error.response?.data || error.message); // Debug log
+            toast.error('Checkout error: ',error.response?.data || error.message);
             if (error.response?.status === 401) {
                 setError('Authentication failed. Please log in again.');
             } else if (error.response?.status === 400) {
