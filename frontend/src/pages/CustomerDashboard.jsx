@@ -3,7 +3,7 @@ import CardGrid from "../components/CardGrid.jsx";
 import NavBar from "../components/NavBar.jsx";
 import { useCart } from "../components/CartContext.jsx";
 import axios from 'axios';
-
+import History from "../components/History.jsx";
 
 function CustomerDashboard() {
     const [products, setProducts] = useState([]);
@@ -53,6 +53,9 @@ function CustomerDashboard() {
                     onAddToCart={addToCart}
                 />
                 </div>
+                <h2 className="text-white/80 text-[1.5rem] font-['Poetsen_One'] pb-2 pt-7 ">My Orders</h2>
+                <hr className="mb-[3vh] text-white/50" />
+                <History />
             </div>
         </div>
     );
