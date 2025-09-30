@@ -7,6 +7,7 @@ function DeliveryDashboard() {
     const [error,setError] = useState("");
     const [loading,setLoading]=useState(true);
     const [updatingDelivery,setUpdatingDelivery]=useState(null);
+    const [history, setHistory] = useState([]);
 
      const createApiConfig = () => {
         const token = localStorage.getItem('token');
@@ -61,8 +62,26 @@ function DeliveryDashboard() {
         }
     }
 
+    const fetchDeliveryHistory = async () =>
+    {
+        try
+        {
+        setError(""); 
+        const config = createApiConfig();
+        const response = await axios.get("http://localhost:5000/api/delivery/delivery-history",config);
+        setHistory(response.data);
+        }
+        catch(err)
+        {
+            console.log(err);
+            setError('Failed to fetch delivery history.');
+        }
+       
+    }
+
        useEffect(() => {
         fetchMyDeliveries();
+        fetchDeliveryHistory();
     }, []);
 
     const formatDate = (dateString) => {
