@@ -15,11 +15,13 @@
     "axios": "^1.12.2",
     "framer-motion": "^12.23.16",
     "gsap": "^3.13.0",
+    "jwt-decode": "^4.0.0",
     "motion": "^12.23.16",
     "ogl": "^1.0.11",
     "postprocessing": "^6.37.8",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.9.1",
     "reactjs-popup": "^2.0.6",
     "three": "^0.180.0"

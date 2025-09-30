@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const CartContext = createContext();
 
@@ -48,6 +49,7 @@ export const CartProvider = ({ children }) => {
         return [...prevItems, { ...product, quantity }];
       }
     });
+    toast.success(`${product.name} x ${quantity} added to cart!`);
   };
 
   const handleRemoveFromCart = (productId) => {
@@ -85,6 +87,7 @@ export const CartProvider = ({ children }) => {
             setMessage('Order placed successfully!');
             setCartItems([]);
             localStorage.removeItem('cartItems'); // Clear cart from localStorage 
+            toast.success('Order placed successfully!');
         } catch (error) {
             console.error('Checkout error:', error.response?.data || error.message); // Debug log
             if (error.response?.status === 401) {
@@ -95,6 +98,7 @@ export const CartProvider = ({ children }) => {
                 setError('Failed to place order. Please try again.');
             }
         }
+        
     };
   
   const updateQuantity = (productId, newQuantity) => {
@@ -111,6 +115,7 @@ export const CartProvider = ({ children }) => {
     );
   }
 };
+
 
   const value = {
     cartItems,

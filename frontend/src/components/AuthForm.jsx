@@ -1,10 +1,15 @@
 // frontend/src/components/AuthForm.jsx
-import React, { useState } from 'react';
+import React, { useState,useEffect, useRef} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../index.css';
+import { useAuth } from './AuthContext';
+import toast from 'react-hot-toast';
+
+
 
 const AuthForm = () => {
+    const { login } = useAuth();
     const [isLogin, setIsLogin] = useState(true);
     const [role, setRole] = useState('customer');
     // 1. Updated state to include all required fields
@@ -25,9 +30,10 @@ const AuthForm = () => {
         try {
             const response = await axios.post(url, formData);
             if (isLogin) {
-                localStorage.setItem('token', response.data.token);
+                login(response.data.token);
                 console.log('Login successful!');
                 navigate(`/${role}/dashboard`);
+                
             } else {
                 console.log('Registration successful! Please log in.');
                 setIsLogin(true);
@@ -36,6 +42,8 @@ const AuthForm = () => {
             setError(err.response?.data?.message || 'An error occurred.');
         }
     };
+
+    
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center p-4 relative overflow-hidden">
@@ -217,4 +225,31 @@ const AuthForm = () => {
     );
 };
 
-export default AuthForm;
+const HomePage = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const effectRan = useRef(false);
+
+  useEffect(() => {
+    if (effectRan.current===false && user) {
+      toast.error("You are already logged in. Please use the logout button.");  
+      navigate(`/${user.role}/dashboard`, { replace: true });
+    }
+    return () => { effectRan.current = true; 
+
+    };
+  }, [user, navigate]); 
+  
+  if (user) {
+    return null;
+  }
+
+  return (
+    <div className="homepage-container">
+      <AuthForm />
+    </div>
+  );
+};
+
+
+export default HomePage;
