@@ -44,10 +44,12 @@ body {
 
 /*Card Grid styles */
 .card-grid {
+  width: 100%;
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
-  padding-top: 5vh;
+  gap: 2vw;
+  padding: 4vh 2vw;
 }
 
 .card {
@@ -67,9 +69,9 @@ body {
 
 .image-container {
   background-color: #111827;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 15px;
+  border-radius: 1.2em;
+  padding: 2em;
+  margin-bottom: 1em;
 }
 
 .product-image {
@@ -110,16 +112,17 @@ body {
 /* 1. Base class for ALL buttons in the action section */
 .action-section {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   margin-top: auto; /* Pushes to the bottom */
-  padding-top: 15px;
+  gap: 3em;
+  
 }
 
 .quantity-counter {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 1em;
 }
 .quantity-counter span {
   font-weight: bold;
@@ -141,8 +144,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 165px;
-  height: 50px;
+  flex-grow: 1;
+  width: 11vw;
+  height: 6.5vh;
   border: none;
   border-radius: 25px;
   cursor: pointer;
@@ -151,17 +155,23 @@ body {
 .icon-button text{
   font-family: poetsen one, sans-serif;
   color: #ffffff;
-  padding-right:10px;
+  padding-right: 1vw;
 }
 .icon-button img {
-  height: 24px;
+  height: 2vw;
+  max-height: 24px;
 }
 
 /* ADDED: Styles for Edit/Delete text buttons */
+
 .text-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   font-family: poetsen one, sans-serif;
-  padding: 10px 20px;
-  font-size: 15px;
+  padding: .75em 1.4em;
+  font-size: 1rem;
   font-weight: 600;
   border: none;
   border-radius: 50px;
@@ -170,68 +180,6 @@ body {
   background-image: linear-gradient(to right, #9810fa,#7f22fe, #d91a79);
 }
 
-/*Navbar styles*/
-/* src/components/Navbar/Navbar.css */
-
-.navbar-container {
-  background-color: #1a1a2e; 
-  /* Subtle light border for dark mode */
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  padding: 15px 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
-  max-width: 90%;
-  margin: 20px auto;
-  position: sticky;
-}
-
-.navbar-content {
-  display: flex; /* Use flexbox for layout */
-  flex-direction: row;
-  justify-content: space-between; /* Space out left and right sections */
-  align-items: center; /* Vertically align items */
-  width: 1200px; /* Max width for content inside the bar */
-  margin: 0 auto; /* Center content horizontally */
-  padding: 0 18px; /* Horizontal padding for content */
-}
-
-.navbar-left {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-logo {
-  height: 30px; /* Adjust logo height as needed */
-  margin-right: 10px; /* Space between logo and app name */
-}
-
-.navbar-app-name {
-  font-size: 1.5rem; /* Larger font size for the app name */
-  font-weight: 700; /* Bold text */
-  color: #e0e0e0; /* Dark text color */
-}
-
-.navbar-right {
-  display: flex;
-  gap: 10px; /* Space between the buttons */
-}
-
-.navbar-button {
-  background-color: #2a2a4a;
-  color: #c0c0d1;
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.navbar-button:hover {
-  background-color: #3a3a5a;
-  color: #ffffff; /* Darker text on hover */
-}   
 
 /*cart page styles*/
 .cart-page{
