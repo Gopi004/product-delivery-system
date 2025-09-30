@@ -6,6 +6,7 @@ import DealerPage from './pages/DealerPage.jsx';
 import { CartProvider } from './components/CartContext.jsx';
 import './CustomerDashboard.css'
 import CartPage from './components/CartPage.jsx';
+import DeliveryDashboard from './pages/DeliveryDashboard.jsx';
 
 // --- Placeholder Components ---
 // You should move these into their own files inside a 'pages' folder later.
@@ -18,7 +19,7 @@ const HomePage = () => (
 
 const Customerdash = () => <h2>Customer Dashboard</h2>;
 const DealerDashboard = () => <h2>Dealer Dashboard</h2>;
-const DeliveryDashboard = () => <h2>Delivery Personnel Dashboard</h2>;
+const DeliveryDash = () => <h2>Delivery Personnel Dashboard</h2>;
 
 
 function App() {
