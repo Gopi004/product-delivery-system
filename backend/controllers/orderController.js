@@ -78,7 +78,7 @@ const createOrder = async (req, res) => {
 
 const getDealerOrders = async (req, res) => {
   const dealerId = req.user.id;
-  console.log("getDealerOrders called for dealerId:", dealerId);
+
 
   try {
     const [orders] = await pool.query(

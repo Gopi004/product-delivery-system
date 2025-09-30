@@ -1,5 +1,6 @@
 import {useState , useEffect} from "react";
 import CardGrid from "../components/CardGrid.jsx"
+import NavBar from "../components/NavBar.jsx";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
@@ -238,15 +239,12 @@ function DealerPage(){
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000 z-0"></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-violet-600/8 to-fuchsia-600/8 rounded-full blur-2xl animate-pulse delay-500 z-0"></div>
 
-            <nav className="bg-gray-900/70 backdrop-blur-xl shadow-2xl border border-gray-700/50 p-4 overflow-hidden fixed top-0 left-1/4 z-[1000] flex flex-row justify-between items-center rounded-2xl w-[45vw] m-[3vh] mb-[5vh] font-['Poetsen_One'] text-green-50">
-                <p className="text-[1.5rem]">PDS</p>
-                <div className="flex flex-row justify-around items-center gap-[2vw]">
-                    <p className="dealer-name">Hello, Dealer</p>
-                    <button className="h-[6vh] border-none text-white rounded-lg font-['Poetsen_One'] font-thin cursor-pointer px-[1vw] bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 hover:from-purple-700 hover:via-violet-700 hover:to-pink-700 transform hover:scale-105" 
-                        onClick={handleAddClick}>Add Product
-                    </button>
-                </div>
-            </nav>
+            <NavBar 
+                userType="dealer" 
+                userName="Dealer" 
+                showAddButton={true} 
+                onAddClick={handleAddClick}
+            />
 
             <Popup open={isPopupOpen} onClose={() => setIsPopupOpen(false)} modal nested>
                 {close => (

@@ -41,7 +41,7 @@ function CustomerDashboard() {
             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-r from-purple-600/10 to-pink-600/10 rounded-full blur-3xl animate-pulse z-0"></div>
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000 z-0"></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-violet-600/8 to-fuchsia-600/8 rounded-full blur-2xl animate-pulse delay-500 z-0"></div>   
-            <NavBar />
+            <NavBar userType="customer" />
             <div className="mt-[15vh] mx-[7.5vw]">
                 <h2 className="text-white/80 text-[1.5rem] font-['Poetsen_One'] pb-2 ">Products</h2>
                 <hr className="mb-[3vh] text-white/50" />

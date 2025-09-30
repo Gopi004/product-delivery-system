@@ -1,7 +1,73 @@
-import {useState} from "react";
-import NavBar from "../components/NavBar";
+import {useState, useEffect} from "react";
+import NavBar from "../components/NavBar.jsx";
+import axios from "axios";
 
 function DeliveryDashboard() {
+    const [deliveries, setDeliveries] = useState([]);
+    const [error,setError] = useState("");
+    const [loading,setLoading]=useState(true);
+    const [updatingDelivery,setUpdatingDelivery]=useState(null);
+
+     const createApiConfig = () => {
+        const token = localStorage.getItem('token');
+        return { 
+            headers: 
+            { Authorization: `Bearer ${token}` } 
+        };
+    };
+
+    const fetchMyDeliveries = async () =>
+    {
+        try
+        {
+            setError("");
+            setLoading(true);
+            const config= createApiConfig();
+            const response = await axios.get("http://localhost:5000/api/delivery/mydeliveries",config);
+            setDeliveries(response.data);
+        }
+        catch(err)
+        {
+            console.error("Error fetching deliveries:",err);
+            setError("Failed to fetch deliveries");
+        }
+        finally
+        {
+            setLoading(false);
+        }
+    }
+
+    const updateDeliveryStatus = async (deliveryId, status) =>
+    {
+        try
+        {
+            setError("");
+            setUpdatingDelivery(deliveryId);
+            const config = createApiConfig();
+
+            await axios.put(`http://localhost:5000/api/delivery/deliveries/${deliveryId}/status`,{status},config);
+
+            await fetchMyDeliveries();
+            alert(`Delivery marked as ${status} successfully!`);
+        }
+        catch(err)
+        {
+            console.error('Error updating delivery status:', err);
+            setError(err.response?.data?.message || "Failed to update delivery status");
+        }
+        finally
+        {
+            setUpdatingDelivery(null);
+        }
+    }
+
+       useEffect(() => {
+        fetchMyDeliveries();
+    }, []);
+
+
+
+
 
     return(
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden p-[4vh]">
@@ -10,12 +76,10 @@ function DeliveryDashboard() {
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000 z-0"></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-violet-600/8 to-fuchsia-600/8 rounded-full blur-2xl animate-pulse delay-500 z-0"></div>
 
-            <nav className="bg-gray-900/70 backdrop-blur-xl shadow-2xl border border-gray-700/50 p-4 overflow-hidden fixed top-0 left-1/4 z-[1000] flex flex-row justify-between items-center rounded-2xl w-[45vw] m-[3vh] mb-[5vh] font-['Poetsen_One'] text-green-50">
-                <p className="text-[1.5rem]">PDS</p>
-                <div className="flex flex-row justify-around items-center gap-[2vw]">
-                    <p className="dealer-name">Hello, {/* name of the delivery guy */}</p>
-                </div>
-            </nav>
+            <NavBar 
+                userType="delivery" 
+                userName="Delivery Personnel"
+            />
             
             <div className="relative z-10 mt-[15vh] mx-[7.5vw]">
                 <div>
