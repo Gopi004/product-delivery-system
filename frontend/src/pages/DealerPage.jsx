@@ -4,6 +4,8 @@ import NavBar from "../components/NavBar.jsx";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
+import toast from "react-hot-toast";
+import { useAuth } from "../components/AuthContext.jsx";
 
 function DealerPage(){
 
@@ -19,6 +21,7 @@ function DealerPage(){
     const [isAssignPopupOpen, setIsAssignPopupOpen] = useState(false);
     const [selectedPersonnel, setSelectedPersonnel] = useState('');
     const [orderFilter, setOrderFilter] = useState('all'); // 'all', 'pending', 'assigned', 'delivered'
+    const { logout:onLogout } = useAuth();
 
     const createApiConfig = () => {
         const token = localStorage.getItem('token');
@@ -101,6 +104,7 @@ function DealerPage(){
             try {
                 const config = createApiConfig();
                 await axios.delete(`http://localhost:5000/api/products/${productId}`, config);
+                toast.success('Product deleted successfully!');
                 fetchProducts(); 
             } catch (err) {
                 setError('Failed to delete product.');
@@ -115,8 +119,10 @@ function DealerPage(){
             const config = createApiConfig();
             if (editingProduct) {
                 await axios.put(`http://localhost:5000/api/products/${editingProduct.product_id}`, formData, config);
+                toast.success('Product updated successfully!');
             } else {
                 await axios.post("http://localhost:5000/api/products",formData,config);
+                toast.success('Product added successfully!');
             }
             setIsPopupOpen(false); 
             fetchProducts(); 
@@ -152,6 +158,7 @@ function DealerPage(){
             fetchOrders(); // Refresh orders list
             fetchDeliveryPersonnel(); // Refresh delivery personnel list
             alert('Delivery assigned successfully!');
+            toast.success('Delivery assigned successfully!');
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to assign delivery');
         }
@@ -238,7 +245,7 @@ function DealerPage(){
             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-r from-purple-600/10 to-pink-600/10 rounded-full blur-3xl animate-pulse z-0"></div>
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000 z-0"></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-violet-600/8 to-fuchsia-600/8 rounded-full blur-2xl animate-pulse delay-500 z-0"></div>
-
+            <button className="fixed top-7 right-5 bg-red-600/20 border border-red-500/30 text-red-400 font-bold py-2 px-4 rounded-lg transition-colors duration-200 transform hover:text-white hover:bg-red-600/90" onClick={onLogout}>Logout</button>
             <NavBar 
                 userType="dealer" 
                 userName="Dealer" 

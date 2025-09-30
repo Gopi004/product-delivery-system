@@ -3,7 +3,8 @@ import CardGrid from "../components/CardGrid.jsx";
 import NavBar from "../components/NavBar.jsx";
 import { useCart } from "../components/CartContext.jsx";
 import axios from 'axios';
-import History from "./OrderHistoryPage.jsx";
+import { useAuth } from "../components/AuthContext.jsx";
+
 
 function CustomerDashboard() {
     const [products, setProducts] = useState([]);
@@ -19,6 +20,7 @@ function CustomerDashboard() {
         message 
     } = useCart();
 
+    const { logout: onLogout } = useAuth();
     const API_URL = 'http://localhost:5000';
 
     
@@ -34,6 +36,7 @@ function CustomerDashboard() {
         };
         fetchProducts();
     }, []);
+    
 
 
     return (
@@ -41,6 +44,7 @@ function CustomerDashboard() {
             <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-r from-purple-600/10 to-pink-600/10 rounded-full blur-3xl animate-pulse z-0"></div>
             <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-r from-indigo-600/10 to-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000 z-0"></div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-gradient-to-r from-violet-600/8 to-fuchsia-600/8 rounded-full blur-2xl animate-pulse delay-500 z-0"></div>   
+            <button className="fixed top-7 right-5 bg-red-600/20 border border-red-500/30 text-red-400 font-bold py-2 px-4 rounded-lg transition-colors duration-200 transform hover:text-white hover:bg-red-600/90" onClick={onLogout}>Logout</button>
             <NavBar userType="customer" />
             <div className="mt-[15vh] mx-[7.5vw]">
                 <h2 className="text-white/80 text-[1.5rem] font-['Poetsen_One'] pb-2 ">Products</h2>
@@ -53,10 +57,9 @@ function CustomerDashboard() {
                     onAddToCart={addToCart}
                 />
                 </div>
-                <h2 className="text-white/80 text-[1.5rem] font-['Poetsen_One'] pb-2 pt-7 ">My Orders</h2>
-                <hr className="mb-[3vh] text-white/50" />
-                  
+                                  
             </div>
+            
         </div>
     );
 
