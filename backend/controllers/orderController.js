@@ -76,6 +76,36 @@ const createOrder = async (req, res) => {
   }
 };
 
+
+const getCustomerOrders = async (req,res) =>{
+  const customerId= req.user.id;
+
+  try
+  {
+    const [orders] = await pool.query("SELECT * FROM orders WHERE customer_id=?  ORDER BY order_date DESC",[customerId]);
+
+    if (orders.length === 0) {
+        return res.json([]);
+    }
+
+    const orderIds = orders.map(order => order.order_id);
+    const [orderDetails] = await pool.query("SELECT od.*,p.name FROM orderdetails od JOIN products p on od.product_id=p.product_id WHERE od.order_id IN (?)",[orderIds]);
+
+      const ordersWithDetails = orders.map(order => {
+            return {
+                ...order,
+                items: orderDetails.filter(item => item.order_id === order.order_id)
+            };
+        });
+    res.json(ordersWithDetails);
+  }
+  catch(err)
+  {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+}
+
 const getDealerOrders = async (req, res) => {
   const dealerId = req.user.id;
 
@@ -206,4 +236,4 @@ const assignDelivery = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getDealerOrders, assignDelivery };
+module.exports = { createOrder, getDealerOrders, assignDelivery , getCustomerOrders};
