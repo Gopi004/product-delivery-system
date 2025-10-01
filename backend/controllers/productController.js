@@ -46,12 +46,26 @@ const updateProduct = async (req,res) =>
   const dealer_Id=req.user.id;
   try
   {
-    const [result] = await pool.query("UPDATE products SET name=?,description=?,price=?,stock=? WHERE dealer_id=? AND product_id=?",[name, description, price, stock, dealer_Id, id ]);
+    let query = "UPDATE products SET name=?,description=?,price=?,stock=?";
+    let params = [name, description, price, stock];
+    
+    // If new image was uploaded, include it in update
+    if (req.file) {
+      const imageUrl = `/uploads/${req.file.filename}`;
+      query += ",image_url=?";
+      params.push(imageUrl);
+    }
+    
+    query += " WHERE dealer_id=? AND product_id=?";
+    params.push(dealer_Id, id);
+
+    const [result] = await pool.query(query, params);
      if (result.affectedRows === 0) return res.status(404).json({ message: "Product not found or not authorized." });
-      res.json({ message: "Product updated" });
+      res.json({ message: "Product updated successfully" });
   }
   catch(error)
   {
+     console.error("Update product error:", error);
      res.status(500).json({ message: "Server Error" });
   }
 };

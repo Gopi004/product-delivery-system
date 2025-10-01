@@ -91,6 +91,7 @@ function DealerPage(){
             price: product.price,
             stock: product.stock
         });
+        setImageFile(null);
         setIsPopupOpen(true);
     };
 
@@ -136,10 +137,10 @@ function DealerPage(){
             setError('');
             const config = createApiConfig();
             if (editingProduct) {
-                await axios.put(`http://localhost:5000/api/products/${editingProduct.product_id}`, formData, config);
+                await axios.put(`http://localhost:5000/api/products/${editingProduct.product_id}`, data, config);
                 toast.success('Product updated successfully!');
             } else {
-                await axios.post("http://localhost:5000/api/products",data,config);
+                await axios.post("http://localhost:5000/api/products", data, config);
                 toast.success('Product added successfully!');
             }
             setIsPopupOpen(false); 
@@ -273,25 +274,48 @@ function DealerPage(){
 
             <Popup open={isPopupOpen} onClose={() => setIsPopupOpen(false)} modal nested>
                 {close => (
-                    <div className="m-0 p-[2vh] rounded-[15px] bg-gray-900/70">
+                    <div className="m-0 p-[2vh] rounded-[15px] bg-gray-900/90 backdrop-blur-xl border border-gray-600/50 shadow-2xl relative z-[1100]">
                         
-                        <button className="border-none rounded-4xl font-['Poetsen_One'] font-semibold cursor-pointer bg-white w-6" onClick={close}>&times;</button>
-                        <h3 className="font-['Poetsen_One'] text-white text-center text-[1.5rem]">{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
+                        <button className="border-none rounded-4xl font-['Poetsen_One'] font-semibold cursor-pointer bg-white w-6 absolute top-2 right-2" onClick={close}>&times;</button>
+                        <h3 className="font-['Poetsen_One'] text-white text-center text-[1.5rem] mt-2">{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
                         <form className="p-[2vh] flex flex-col items-center gap-[3vh]" onSubmit={handleSubmit}>
                             <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="text" name="name" placeholder="Name" value={formData.name} onChange={handleInput} required />
                             <textarea className="border-none h-[8vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500 content-center" name="description" placeholder="Description" value={formData.description} onChange={handleInput} required></textarea>
                             <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInput} required />
                             <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleInput} required />
                             <div className="flex flex-col items-center gap-2">
-                                {imageFile && (
+                                {/* Show current image if editing and no new file selected */}
+                                {editingProduct && !imageFile && editingProduct.image_url && (
                                     <div className="flex justify-center mb-2">
-                                        <img 
-                                            src={URL.createObjectURL(imageFile)} 
-                                            alt="Preview" 
-                                            className="w-24 h-24 object-cover rounded-lg border-2 border-purple-500/50 shadow-lg"
-                                        />
+                                        <div className="relative">
+                                            <img 
+                                                src={`http://localhost:5000${editingProduct.image_url}`} 
+                                                alt="Current" 
+                                                className="w-24 h-24 object-cover rounded-lg border-2 border-gray-600/50 shadow-lg"
+                                            />
+                                            <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs px-1 rounded">
+                                                Current
+                                            </div>
+                                        </div>
                                     </div>
                                 )}
+                                
+                                {/* Show new image preview if file selected */}
+                                {imageFile && (
+                                    <div className="flex justify-center mb-2">
+                                        <div className="relative">
+                                            <img 
+                                                src={URL.createObjectURL(imageFile)} 
+                                                alt="Preview" 
+                                                className="w-24 h-24 object-cover rounded-lg border-2 border-purple-500/50 shadow-lg"
+                                            />
+                                            <div className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1 rounded">
+                                                New
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                
                                 <input 
                                     id="image-upload"
                                     type="file" 
@@ -299,10 +323,13 @@ function DealerPage(){
                                     onChange={handleFileChange}
                                     accept="image/*"
                                     className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] text-white placeholder-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700 cursor-pointer"
-                                    required 
+                                    required={!editingProduct} // Only required when adding new product
                                 />
                                 <p className="text-gray-400 text-xs text-center">
-                                    Max size: 5MB. Supported: JPG, PNG, GIF, WebP
+                                    {editingProduct 
+                                        ? "Select new image to replace current one (optional)" 
+                                        : "Max size: 5MB. Supported: JPG, PNG, GIF, WebP"
+                                    }
                                 </p>
                             </div>
 
@@ -315,8 +342,8 @@ function DealerPage(){
             {/* Assign Delivery Popup */}
             <Popup open={isAssignPopupOpen} onClose={() => setIsAssignPopupOpen(false)} modal nested>
                 {close => (
-                    <div className="m-0 p-[2vh] rounded-[15px] bg-gray-900/70">
-                        <button className="border-none rounded-4xl font-['Poetsen_One'] font-semibold cursor-pointer bg-white w-6" onClick={close}>&times;</button>
+                    <div className="m-0 p-[2vh] rounded-[15px] bg-gray-900/90 backdrop-blur-xl border border-gray-600/50 shadow-2xl relative z-[1100]">
+                        <button className="border-none rounded-4xl font-['Poetsen_One'] font-semibold cursor-pointer bg-white w-6 absolute top-2 right-2" onClick={close}>&times;</button>
                         <h3 className="font-['Poetsen_One'] text-white text-center text-[1.5rem]">
                             Assign Delivery for Order #{assigningOrder?.order_id}
                         </h3>

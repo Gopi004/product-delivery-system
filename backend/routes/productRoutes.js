@@ -10,7 +10,7 @@ router.get("/",productController.getAllProducts);
 router.post("/",protect,restrictTo('dealer'),upload,productController.addProduct);
 router.get("/my-products",protect,restrictTo('dealer'),productController.getDealerProduct);
 
-router.put("/:id",protect,restrictTo('dealer'),productController.updateProduct);
+router.put("/:id",protect,restrictTo('dealer'),upload,productController.updateProduct);
 router.delete("/:id",protect,restrictTo('dealer'),productController.deleteProduct);
 
 module.exports = router;
