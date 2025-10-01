@@ -176,7 +176,6 @@ function DealerPage(){
             setSelectedPersonnel('');
             fetchOrders(); // Refresh orders list
             fetchDeliveryPersonnel(); // Refresh delivery personnel list
-            alert('Delivery assigned successfully!');
             toast.success('Delivery assigned successfully!');
         } catch (err) {
             setError(err.response?.data?.message || 'Failed to assign delivery');

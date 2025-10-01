@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import NavBar from "../components/NavBar.jsx";
 import axios from "axios";
 import { useAuth } from "../components/AuthContext.jsx";
-
+import toast from "react-hot-toast";
 
 function DeliveryDashboard() {
     const [deliveries, setDeliveries] = useState([]);
@@ -50,9 +50,9 @@ function DeliveryDashboard() {
             const config = createApiConfig();
 
             await axios.put(`http://localhost:5000/api/delivery/deliveries/${deliveryId}/status`,{status},config);
-
+            toast.success('Delivery marked as delivered successfully!');
             await fetchMyDeliveries();
-            alert(`Delivery marked as ${status} successfully!`);
+            
         }
         catch(err)
         {
