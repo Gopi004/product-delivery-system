@@ -8,7 +8,8 @@ import toast from "react-hot-toast";
 import { useAuth } from "../components/AuthContext.jsx";
 
 function DealerPage(){
-
+    
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     const [formData,setformData] = useState({name:"",description:"",price:"",stock:""});
     const [products,setProducts]=useState([]);
     const [orders, setOrders] = useState([]);
@@ -36,7 +37,7 @@ function DealerPage(){
         try {
             setError('');
             const config = createApiConfig();
-            const response = await axios.get("http://localhost:5000/api/products/my-products",config);
+            const response = await axios.get(`${API_URL}/api/products/my-products`,config);
             setProducts(response.data);
         } catch(err) {
             console.error(err);
@@ -49,7 +50,7 @@ function DealerPage(){
         try {
             setError('');
             const config = createApiConfig();
-            const response = await axios.get("http://localhost:5000/api/orders/dealer-orders", config);
+            const response = await axios.get(`${API_URL}/api/orders/dealer-orders`, config);
             console.log('Orders fetched from backend:', response.data);
             console.log('Orders count:', response.data.length);
             setOrders(response.data);
@@ -62,7 +63,7 @@ function DealerPage(){
     const fetchDeliveryPersonnel = async () => {
         try {
             const config = createApiConfig();
-            const response = await axios.get("http://localhost:5000/api/delivery/delivery-personnel", config);
+            const response = await axios.get(`${API_URL}/api/delivery/delivery-personnel`, config);
             setDeliveryPersonnel(response.data);
         } catch(err) {
             console.error(err);
@@ -111,7 +112,7 @@ function DealerPage(){
         if (window.confirm('Are you sure you want to delete this product?')) {
             try {
                 const config = createApiConfig();
-                await axios.delete(`http://localhost:5000/api/products/${productId}`, config);
+                await axios.delete(`${API_URL}/api/products/${productId}`, config);
                 toast.success('Product deleted successfully!');
                 fetchProducts(); 
             } catch (err) {
@@ -137,10 +138,10 @@ function DealerPage(){
             setError('');
             const config = createApiConfig();
             if (editingProduct) {
-                await axios.put(`http://localhost:5000/api/products/${editingProduct.product_id}`, data, config);
+                await axios.put(`${API_URL}/api/products/${editingProduct.product_id}`, data, config);
                 toast.success('Product updated successfully!');
             } else {
-                await axios.post("http://localhost:5000/api/products", data, config);
+                await axios.post(`${API_URL}/api/products`, data, config);
                 toast.success('Product added successfully!');
             }
             setIsPopupOpen(false); 
@@ -167,7 +168,7 @@ function DealerPage(){
         try {
             setError('');
             const config = createApiConfig();
-            await axios.put(`http://localhost:5000/api/orders/${assigningOrder.order_id}/assign`, {
+            await axios.put(`${API_URL}/api/orders/${assigningOrder.order_id}/assign`, {
                 personnelId: selectedPersonnel
             }, config);
             
@@ -288,7 +289,7 @@ function DealerPage(){
                                     <div className="flex justify-center mb-2">
                                         <div className="relative">
                                             <img 
-                                                src={`http://localhost:5000${editingProduct.image_url}`} 
+                                                src={`${API_URL}${editingProduct.image_url}`} 
                                                 alt="Current" 
                                                 className="w-24 h-24 object-cover rounded-lg border-2 border-gray-600/50 shadow-lg"
                                             />

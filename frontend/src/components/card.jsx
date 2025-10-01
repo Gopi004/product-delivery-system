@@ -5,6 +5,7 @@ import { useCart } from "./CartContext";
 const Card = ({ product, view, onEdit, onDelete }) => {
     const {addToCart} = useCart();
     const [quantity, setQuantity] = useState(1);
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     const handleIncrement = () => {
         setQuantity(prevQuantity => prevQuantity + 1);
     };
@@ -18,7 +19,7 @@ const Card = ({ product, view, onEdit, onDelete }) => {
     return (
         <div className="card">
             <div className="image-container">
-                <img src={`http://localhost:5000${product.image_url}`} alt={product.name} className="product-image" />
+                <img src={`${API_URL}${product.image_url}`} alt={product.name} className="product-image" />
             </div>
 
             <div className="product-details">

@@ -5,6 +5,7 @@ import { useAuth } from "../components/AuthContext.jsx";
 import toast from "react-hot-toast";
 
 function DeliveryDashboard() {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     const [deliveries, setDeliveries] = useState([]);
     const [error,setError] = useState("");
     const [loading,setLoading]=useState(true);
@@ -27,7 +28,7 @@ function DeliveryDashboard() {
             setError("");
             setLoading(true);
             const config= createApiConfig();
-            const response = await axios.get("http://localhost:5000/api/delivery/mydeliveries",config);
+            const response = await axios.get(`${API_URL}/api/delivery/mydeliveries`,config);
             setDeliveries(response.data);
         }
         catch(err)
@@ -49,7 +50,7 @@ function DeliveryDashboard() {
             setUpdatingDelivery(deliveryId);
             const config = createApiConfig();
 
-            await axios.put(`http://localhost:5000/api/delivery/deliveries/${deliveryId}/status`,{status},config);
+            await axios.put(`${API_URL}/api/delivery/deliveries/${deliveryId}/status`,{status},config);
             toast.success('Delivery marked as delivered successfully!');
             await fetchMyDeliveries();
             
@@ -71,7 +72,7 @@ function DeliveryDashboard() {
         {
         setError(""); 
         const config = createApiConfig();
-        const response = await axios.get("http://localhost:5000/api/delivery/delivery-history",config);
+        const response = await axios.get(`${API_URL}/api/delivery/delivery-history`,config);
         setHistory(response.data);
         }
         catch(err)

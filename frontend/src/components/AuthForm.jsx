@@ -12,6 +12,7 @@ const AuthForm = () => {
     const { login } = useAuth();
     const [isLogin, setIsLogin] = useState(true);
     const [role, setRole] = useState('customer');
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     // 1. Updated state to include all required fields
     const [formData, setFormData] = useState({ name: '', email: '', password: '', phone: '', address: '' });
     const [error, setError] = useState('');
@@ -25,7 +26,7 @@ const AuthForm = () => {
         e.preventDefault();
         setError('');
         const action = isLogin ? 'login' : 'register';
-        const url = `http://localhost:5000/api/${action}/${role}`;
+        const url = `${API_URL}/api/${action}/${role}`;
 
         try {
             const response = await axios.post(url, formData);

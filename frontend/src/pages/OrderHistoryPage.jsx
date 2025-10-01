@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 
 
 const OrderHistoryPage = () => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     const [orders, setOrders] = useState([]);
     const [error, setError] = useState('');
 
@@ -21,7 +22,7 @@ const OrderHistoryPage = () => {
         try
         {
             const config= createApiConfig();
-            const response = await axios.get('http://localhost:5000/api/orders/customer-orders', config);
+            const response = await axios.get(`${API_URL}/api/orders/customer-orders`, config);
             // Sort: not delivered first
             const sortedOrders = response.data.sort((a, b) => {
                 const aDelivered = a.status?.toLowerCase() === 'delivered';
