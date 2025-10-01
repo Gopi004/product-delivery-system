@@ -12,7 +12,6 @@ const NavBar = ({ userType = "customer", userName, showAddButton = false, onAddC
         dealer: [
         ],
         delivery: [
-            { to: "/delivery/dashboard", label: "Home" }
         ]
     };
 

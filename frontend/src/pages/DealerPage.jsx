@@ -282,31 +282,30 @@ function DealerPage(){
                             <textarea className="border-none h-[8vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500 content-center" name="description" placeholder="Description" value={formData.description} onChange={handleInput} required></textarea>
                             <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInput} required />
                             <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleInput} required />
-                            {!editingProduct && ( // Only show for new products for simplicity
-                                <div className="flex flex-col items-center gap-2">
-                                    {imageFile && (
-                                        <div className="flex justify-center mb-2">
-                                            <img 
-                                                src={URL.createObjectURL(imageFile)} 
-                                                alt="Preview" 
-                                                className="w-24 h-24 object-cover rounded-lg border-2 border-purple-500/50 shadow-lg"
-                                            />
-                                        </div>
-                                    )}
-                                    <input 
-                                        id="image-upload"
-                                        type="file" 
-                                        name="image" 
-                                        onChange={handleFileChange}
-                                        accept="image/*"
-                                        className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700 cursor-pointer"
-                                        required 
-                                    />
-                                    <p className="text-gray-400 text-xs text-center">
-                                        Max size: 5MB. Supported: JPG, PNG, GIF, WebP
-                                    </p>
-                                </div>
-                            )}
+                            <div className="flex flex-col items-center gap-2">
+                                {imageFile && (
+                                    <div className="flex justify-center mb-2">
+                                        <img 
+                                            src={URL.createObjectURL(imageFile)} 
+                                            alt="Preview" 
+                                            className="w-24 h-24 object-cover rounded-lg border-2 border-purple-500/50 shadow-lg"
+                                        />
+                                    </div>
+                                )}
+                                <input 
+                                    id="image-upload"
+                                    type="file" 
+                                    name="image" 
+                                    onChange={handleFileChange}
+                                    accept="image/*"
+                                    className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] text-white placeholder-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700 cursor-pointer"
+                                    required 
+                                />
+                                <p className="text-gray-400 text-xs text-center">
+                                    Max size: 5MB. Supported: JPG, PNG, GIF, WebP
+                                </p>
+                            </div>
+
                             <button className="h-[6vh] border-none bg-gradient-to-r from-purple-600 via-violet-600 to-pink-600 hover:from-purple-700 hover:via-violet-700 hover:to-pink-700 transform hover:scale-105 rounded-[10px] font-['Poetsen_One'] px-4 cursor-pointer font-thin text-white " type="submit">{editingProduct ? 'Update Product' : 'Save Product'}</button>
                         </form>
                     </div>
@@ -392,7 +391,7 @@ function DealerPage(){
                     <div>
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-white/80 text-[1.5rem] font-['Poetsen_One']">Customer Orders</h3>
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 mt-[2vh]">
                                 <div className="text-xs text-gray-400 bg-gray-800/50 px-3 py-1 rounded-lg">
                                     📋 Total: {orders.length}
                                 </div>
