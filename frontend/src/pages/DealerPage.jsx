@@ -364,7 +364,7 @@ function DealerPage(){
                                 <h4 className="text-white mb-2">Order Details:</h4>
                                 <p className="text-gray-300 text-sm">Customer: {assigningOrder?.customer_name}</p>
                                 <p className="text-gray-300 text-sm">Address: {assigningOrder?.customer_address}</p>
-                                <p className="text-gray-300 text-sm">Total: ${assigningOrder?.total_amount}</p>
+                                <p className="text-gray-300 text-sm">Total: ₹{assigningOrder?.total_amount}</p>
                             </div>
                             <form onSubmit={handleAssignDelivery} className="flex flex-col items-center gap-[3vh]">
                                 <select 
@@ -583,7 +583,7 @@ function DealerPage(){
                                                     )}
                                                 </div>
                                                 <p className="text-purple-400 font-bold text-lg">
-                                                    Total: ${order.total_amount}
+                                                    Total: ₹{order.total_amount}
                                                 </p>
                                             </div>
                                         </div>
@@ -620,11 +620,11 @@ function DealerPage(){
                                                         <div>
                                                             <div className="text-white font-semibold">{item.product_name}</div>
                                                             <div className="text-gray-400 text-xs">
-                                                                ${item.price} × {item.quantity}
+                                                                ₹{item.price} × {item.quantity}
                                                             </div>
                                                         </div>
                                                         <div className="text-purple-400 font-bold">
-                                                            ${(item.price * item.quantity).toFixed(2)}
+                                                            ₹{(item.price * item.quantity).toFixed(2)}
                                                         </div>
                                                     </div>
                                                 ))}

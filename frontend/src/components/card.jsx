@@ -25,7 +25,7 @@ const Card = ({ product, view, onEdit, onDelete }) => {
             <div className="product-details">
                 <h2 className="product-title">{product.name}</h2>
                 <p className="product-description">{product.description}</p>
-                <p className="product-price">${product.price}</p>
+                <p className="product-price">₹{product.price}</p>
 
                 <div className="action-section">
                     {view === 'customer' && (

@@ -155,7 +155,7 @@ const OrderHistoryPage = () => {
                                                 📦 Ordered Items:
                                             </h5>
                                             <p className="text-blue-400 font-semibold text-lg">
-                                                    Total: ${order.total_amount}
+                                                    Total: ₹{order.total_amount}
                                             </p>
                                             </div>
                                             <div className="bg-gray-800/50 rounded-lg overflow-hidden border border-gray-600/30">
@@ -164,11 +164,11 @@ const OrderHistoryPage = () => {
                                                         <div>
                                                             <div className="text-white font-semibold ">{item.name}</div>
                                                             <div className="text-gray-400 text-xs">
-                                                                ${item.price} × {item.quantity}
+                                                                ₹{item.price} × {item.quantity}
                                                             </div>
                                                         </div>
                                                         <div className="text-white font-bold">
-                                                            ${(item.price * item.quantity).toFixed(2)}
+                                                            ₹{(item.price * item.quantity).toFixed(2)}
                                                         </div>
                                                     </div>
                                                 ))}

@@ -26,7 +26,7 @@ const CartPage = () => {
              
               <div className='cart-item-info'>
                 <h3>{item.name}</h3>
-                <p>Price: ${item.price}</p>
+                <p>Price: ₹{item.price}</p>
               </div>
               <div className="cart-item-quantity">
                   <button onClick={() => updateQuantity(item.product_id, item.quantity - 1)}>-</button>
@@ -34,7 +34,7 @@ const CartPage = () => {
                   <button onClick={() => updateQuantity(item.product_id, item.quantity + 1)}>+</button>
                 </div>
                 <div className="cart-item-total">
-                  <p>${(item.price * item.quantity).toFixed(2)}</p>
+                  <p>₹{(item.price * item.quantity).toFixed(2)}</p>
                 </div>
                 <button className='cart-item-remove' onClick={() => onRemove(item.product_id)}>&times;</button>
             </div>
@@ -46,11 +46,11 @@ const CartPage = () => {
           <h2>Order Summary</h2>
           <div className="summary-line">
             <span>Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
+            <span>₹{subtotal.toFixed(2)}</span>
           </div>
           <div className="summary-line total">
             <span>Total</span>
-            <span>${totalPrice.toFixed(2)}</span>
+            <span>₹{totalPrice.toFixed(2)}</span>
           </div>
           <button className="checkout-button" onClick={onCheckout}>
             Proceed to Checkout
