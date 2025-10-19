@@ -279,10 +279,22 @@ function DealerPage(){
                         <button className="border-none rounded-4xl font-['Poetsen_One'] font-semibold cursor-pointer bg-white w-6 absolute top-2 right-2" onClick={close}>&times;</button>
                         <h3 className="font-['Poetsen_One'] text-white text-center text-[1.5rem] mt-2">{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
                         <form className="p-[2vh] flex flex-col items-center gap-[3vh]" onSubmit={handleSubmit}>
-                            <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="text" name="name" placeholder="Name" value={formData.name} onChange={handleInput} required />
-                            <textarea className="border-none h-[8vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500 content-center" name="description" placeholder="Description" value={formData.description} onChange={handleInput} required></textarea>
-                            <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="price" placeholder="Price" value={formData.price} onChange={handleInput} required />
-                            <input className="border-none h-[6vh] w-[18vw] rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="stock" placeholder="Stock" value={formData.stock} onChange={handleInput} required />
+                            <div className="w-[18vw] flex flex-col gap-2">
+                                <label className="text-white text-sm font-semibold">Name</label>
+                                <input className="border-none h-[6vh] w-full rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="text" name="name" placeholder="Enter product name" value={formData.name} onChange={handleInput} required />
+                            </div>
+                            <div className="w-[18vw] flex flex-col gap-2">
+                                <label className="text-white text-sm font-semibold">Description</label>
+                                <textarea className="border-none h-[8vh] w-full rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500 content-center" name="description" placeholder="Enter product description" value={formData.description} onChange={handleInput} required></textarea>
+                            </div>
+                            <div className="w-[18vw] flex flex-col gap-2">
+                                <label className="text-white text-sm font-semibold">Price</label>
+                                <input className="border-none h-[6vh] w-full rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="price" placeholder="Enter price" value={formData.price} onChange={handleInput} required />
+                            </div>
+                            <div className="w-[18vw] flex flex-col gap-2">
+                                <label className="text-white text-sm font-semibold">Stock</label>
+                                <input className="border-none h-[6vh] w-full rounded-[10px] text-[1rem] pl-[1.5vw] bg-gray-800/80 border border-gray-600/50 text-white placeholder-gray-500" type="number" name="stock" placeholder="Enter stock quantity" value={formData.stock} onChange={handleInput} required />
+                            </div>
                             <div className="flex flex-col items-center gap-2">
                                 {/* Show current image if editing and no new file selected */}
                                 {editingProduct && !imageFile && editingProduct.image_url && (

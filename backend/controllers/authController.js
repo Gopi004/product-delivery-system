@@ -1,85 +1,96 @@
-const pool=require('../db/db');
-const bcrypt= require("bcryptjs");
-const jwt=require("jsonwebtoken");
+const pool = require("../db/db");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const registerUser=  async (req,res) => {
-  const {role} = req.params;
-  const {name,email,phone,address,password} = req.body;
+const registerUser = async (req, res) => {
+  const { role } = req.params;
+  const { name, email, phone, address, password } = req.body;
+
+  // Email validation - must be @gmail.com
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+  if (!emailRegex.test(email)) {
+    return res
+      .status(400)
+      .json({ message: "Email must be a valid @gmail.com address" });
+  }
 
   const tableMap = {
-    customer:"customers",
+    customer: "customers",
     dealer: "dealers",
-    delivery:"deliverypersonnel"
+    delivery: "deliverypersonnel",
   };
 
-  const tableName=tableMap[role];
-  if(!tableName)
-  {
-    return res.status(400).json({message: "Invalid User role specified"});
+  const tableName = tableMap[role];
+  if (!tableName) {
+    return res.status(400).json({ message: "Invalid User role specified" });
   }
-  
-  try
-  {
-    const salt= await bcrypt.genSalt(10);
-    const hashedPassword= await bcrypt.hash(password,salt);
 
-    await pool.query(`INSERT INTO ${tableName} (name,email,phone,address,password_hash) VALUES(?,?,?,?,?)`, [name,email,phone,address,hashedPassword])
-    res.status(201).json({ message: `${role.charAt(0).toUpperCase() + role.slice(1)} registered successfully` });
-  }
-  catch(err)
-  {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    await pool.query(
+      `INSERT INTO ${tableName} (name,email,phone,address,password_hash) VALUES(?,?,?,?,?)`,
+      [name, email, phone, address, hashedPassword]
+    );
+    res
+      .status(201)
+      .json({
+        message: `${
+          role.charAt(0).toUpperCase() + role.slice(1)
+        } registered successfully`,
+      });
+  } catch (err) {
     console.log(err);
-    return res.status(500).json({message :" Server Error"});
+    return res.status(500).json({ message: " Server Error" });
   }
 };
 
-const loginUser= async (req,res) => {
-  const {role} = req.params;
-  const {email,password}= req.body;
+const loginUser = async (req, res) => {
+  const { role } = req.params;
+  const { email, password } = req.body;
 
-  const tableMap={
-    customer:{ table: 'customers', idColumn:'customer_id'},
-    dealer: {table: 'dealers', idColumn:'dealer_id'},
-    delivery:{table: 'deliverypersonnel',idColumn:'personnel_id'}
+  const tableMap = {
+    customer: { table: "customers", idColumn: "customer_id" },
+    dealer: { table: "dealers", idColumn: "dealer_id" },
+    delivery: { table: "deliverypersonnel", idColumn: "personnel_id" },
   };
 
-  const userInfo=tableMap[role];
-  if (!userInfo)
-  {
-    return res.status(400).json({message: "Invalid user role specified"});
+  const userInfo = tableMap[role];
+  if (!userInfo) {
+    return res.status(400).json({ message: "Invalid user role specified" });
   }
 
-  try
-  {
-    const [rows]= await pool.query(`SELECT * FROM ${userInfo.table} WHERE email=?`,[email]);
+  try {
+    const [rows] = await pool.query(
+      `SELECT * FROM ${userInfo.table} WHERE email=?`,
+      [email]
+    );
 
-    if (rows.length === 0) 
-    {
+    if (rows.length === 0) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
     const user = rows[0];
-    const isMatch = await bcrypt.compare(password, user.password_hash)
+    const isMatch = await bcrypt.compare(password, user.password_hash);
 
-    if (!isMatch)
-    {
-      return res.status(400).json({message: "Invalid Credentials"});
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid Credentials" });
     }
 
-    const payload={
-      id:user[userInfo.idColumn],
-      role:role
+    const payload = {
+      id: user[userInfo.idColumn],
+      role: role,
     };
 
-    const token= jwt.sign(payload,process.env.JWT_SECRET,{expiresIn: '24h'});
-  
-    res.status(200).json({ message: "Login successful", token });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+    });
 
-  }
-  catch(err)
-  {
+    res.status(200).json({ message: "Login successful", token });
+  } catch (err) {
     console.log(err);
-    res.status(500).json({message: "something went wrong"});
+    res.status(500).json({ message: "something went wrong" });
   }
 };
 
-module.exports={loginUser,registerUser};
+module.exports = { loginUser, registerUser };
